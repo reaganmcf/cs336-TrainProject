@@ -13,17 +13,8 @@
 		<% try {
 	
 			//Get the database connection
-			ApplicationDB db = new ApplicationDB();	
-			Connection con = db.getConnection();		
-
-			//Create a SQL statement
-			Statement stmt = con.createStatement();
-			//Get the selected radio button from the index.jsp
-			String entity = request.getParameter("command");
-			//Make a SELECT query from the table specified by the 'command' parameter at the index.jsp
-			String str = "SELECT * FROM " + entity;
-			//Run the query against the database.
-			ResultSet result = stmt.executeQuery(str);
+			ResultSet result = ApplicationDB.getInstance().BeerDrinkTestCommand();
+			String entity = "beers";
 		%>
 			
 		<!--  Make an HTML table to show the results in: -->
@@ -55,7 +46,7 @@
 
 			<% }
 			//close the connection.
-			db.closeConnection(con);
+			ApplicationDB.getInstance().closeConnection();
 			%>
 		</table>
 
