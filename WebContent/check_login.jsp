@@ -16,7 +16,7 @@
 			String password = request.getParameter("password").toString();
 			boolean result = ApplicationDB.getInstance().CreateAccount(request.getSession(),username,password);
 			if(result) {
-				String redirect = Constants.MAIN_PAGE_REDIRECT_URL;
+				String redirect = Constants.INDEX_PATH_REDIRECT_URL;
 				System.out.println("[check_login.jsp] Successfully created user; Redirecting to " + redirect);
 				response.sendRedirect(redirect);
 			} else {
@@ -41,7 +41,7 @@
 			//out.println(Constants.USER_TABLE_HEADERS);
 			//out.println(user.toTableString());
 			//out.println("</table>");
-			String redirect = Constants.MAIN_PAGE_REDIRECT_URL;
+			String redirect = Constants.INDEX_PATH_REDIRECT_URL;
 			System.out.println("[check_login.jsp] Successfully logged in; Redirecting to " + redirect);
 			response.sendRedirect(redirect);
 		} else {

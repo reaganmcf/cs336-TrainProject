@@ -13,7 +13,7 @@ public class Constants {
 	//Redirect Strings
 	public static final String PROJECT_PATH_NAME = "/cs336Sample";
 	public static final String LOGIN_PAGE_REDIRECT_URL = PROJECT_PATH_NAME + "/login.jsp";
-	public static final String MAIN_PAGE_REDIRECT_URL = PROJECT_PATH_NAME + "/main.jsp";
+	public static final String INDEX_PATH_REDIRECT_URL = PROJECT_PATH_NAME + "/index.jsp";
 	
 	//Table Headers so we don't have to write them out manually all the time
 	public static final String USER_TABLE_HEADERS = 

@@ -15,7 +15,7 @@ Welcome to CS336 Train Project
 <%
 if(request.getSession().getAttribute("user") != null) {
 	//We are already logged in, so bypass this page
-	String redirect = Constants.MAIN_PAGE_REDIRECT_URL;
+	String redirect = Constants.INDEX_PATH_REDIRECT_URL;
 	System.out.println("[login.jsp] Already logged in; Redirecting to " + redirect);
 	response.sendRedirect(redirect);
 }
