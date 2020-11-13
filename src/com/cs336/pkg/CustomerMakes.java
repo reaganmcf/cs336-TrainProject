@@ -13,6 +13,7 @@ public class CustomerMakes {
 	private String city;
 	private String state;
 	private int resNum;
+	
 	public CustomerMakes(
 			String username,
 			String email,
@@ -36,6 +37,11 @@ public class CustomerMakes {
 		this.city = city;
 		this.state = state;
 		this.resNum = resNum;
+	}
+	
+	public CustomerMakes(String username, String password) {
+		this.username = username;
+		this.password = password;
 	}
 	
 	public String getUsername() {
@@ -84,7 +90,7 @@ public class CustomerMakes {
 	
 	@Override
 	public String toString() {
-		return "{username: 'this.getUsername()', password: 'this.getPassword()'}";
+		return "{username: '" + this.getUsername() + "', password: '" + this.getPassword() + "'}";
 	}
 	
 	public String toTableString() {

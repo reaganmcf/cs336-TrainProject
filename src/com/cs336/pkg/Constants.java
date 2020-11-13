@@ -10,6 +10,11 @@ public class Constants {
 	public static final String ADMIN_PASSWORD = "SuperSecurePassword12345";
 	public static final String CUSTOMER_DATABASE = "CustomerMakes";
 	
+	//Redirect Strings
+	public static final String PROJECT_PATH_NAME = "/cs336Sample";
+	public static final String LOGIN_PAGE_REDIRECT_URL = PROJECT_PATH_NAME + "/login.jsp";
+	public static final String MAIN_PAGE_REDIRECT_URL = PROJECT_PATH_NAME + "/main.jsp";
+	
 	//Table Headers so we don't have to write them out manually all the time
 	public static final String USER_TABLE_HEADERS = 
 			"<th>username</th>"+

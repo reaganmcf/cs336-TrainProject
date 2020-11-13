@@ -94,9 +94,9 @@ public class ApplicationDB {
 	 * CheckLogin
 	 * 
 	 * Queries the database to see if a user exists
-	 * If it does, then we also set the following HttpSession attributes
+	 * If it does, then we also set HttpSession.user with populated instance of CustomerMakes
 	 * 
-	 * 
+	 * @param session the current HttpSession
 	 * @param username the user name of the already existing user
 	 * @param password the password of the already existing user
 	 * 
@@ -138,7 +138,7 @@ public class ApplicationDB {
 						res.getString("city"),
 						res.getString("state"),
 						res.getInt("resNum"));
-				System.out.println("[CheckLogin] Created new User " + newUser);
+				System.out.println("[CheckLogin] HttpSession." + Constants.HTTP_SESSION_USER_KEY + " now has " + newUser);
 				session.setAttribute(Constants.HTTP_SESSION_USER_KEY, newUser);
 				return true;
 			} else {
@@ -156,28 +156,51 @@ public class ApplicationDB {
 	 * CreateAccount
 	 * 
 	 * Creates a new account in the database
-	 * 
+	 * If it does, it also sets HttpSession.user representing a successful login
+	 *
+	 * @param session the current HttpSession
 	 * @param username the user name of the new user
 	 * @param password the password of the new user
 	 * 
-	 * @return NULL if the action failed, ResultSet if the action succeeded
+	 * @return boolean whether or not the action was successful
 	 */
-	public ResultSet CreateAccount(String username, String password) {
+	public boolean CreateAccount(HttpSession session, String username, String password) {
 		//If we haven't established a connection, establish one
 		if(connection == null) connection = getConnection();
 		//If we failed to establish a connection, return false
-		if(connection == null) return null;
-		
+		if(connection == null) return false;
+		System.out.println("[CreateAccount] Connected to Database");
+		Statement stmt;
 		//Create a SQL statement
 		try {
-			Statement stmt = connection.createStatement();
+			stmt = connection.createStatement();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			return false;
 		}
-		//Get the selected radio button from the index.jsp
-		
-		return null;
-		
+		boolean res = false;
+		try {
+			//use the production database
+			stmt.execute("use TrainProject");
+			//run our query
+			String query = String.format("INSERT INTO %s (username, password) VALUES ('%s', '%s')", Constants.CUSTOMER_DATABASE, username, password);
+			System.out.println("[CreateAccount] running : " + query);
+			res = stmt.executeUpdate(query) > 0;
+			System.out.println(res);
+			if(res) {
+				System.out.println("[CreateAccount] Query successfully has data");
+				//if there is data in here, create a new CustomerMakes Object and attach it to HttpSession
+				CustomerMakes newUser = new CustomerMakes(username,password);
+				System.out.println("[CreateAccount] HttpSession." + Constants.HTTP_SESSION_USER_KEY + " now has " + newUser);
+				session.setAttribute(Constants.HTTP_SESSION_USER_KEY, newUser);
+			} else {
+				System.out.println("[CreateAccount] Failed to create new CustomerMakes");
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+			
+		return res;
 	}
 }
