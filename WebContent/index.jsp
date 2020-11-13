@@ -5,7 +5,7 @@
 <html>
 <head>
 <meta charset="ISO-8859-1">
-<title>Insert title here</title>
+<title>Index</title>
 </head>
 <body>
 
@@ -20,7 +20,7 @@ if(user == null) {
 //from here on out we know we are logged in
 %>
 <h1>Main Page</h1>
-<h6>Welcome back, <%user.getFirstName();%></h6>
+<h4>Welcome back, <% out.println(user.getUsername()); %></h4>
 
 
 <form method="post" action="logout.jsp">
