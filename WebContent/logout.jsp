@@ -11,6 +11,7 @@
 
 <%
 request.getSession().setAttribute(Constants.HTTP_SESSION_USER_KEY, null);
+request.getSession().invalidate();
 response.sendRedirect(Constants.LOGIN_PAGE_REDIRECT_URL);
 %>
 
