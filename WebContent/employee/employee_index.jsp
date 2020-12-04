@@ -22,6 +22,7 @@ if(employee == null) {
 out.print("Logged in as: " + employee.getUsername() + " " + employee.getLastName());
 
 ArrayList<QA> questions = ApplicationDB.getInstance().GetQuestions();
+ArrayList<Station> stations = ApplicationDB.getInstance().GetStations();
 %>
 
 <!--  ALERT MESSAGES FROM REDIRECTED PAGES  -->
@@ -60,6 +61,20 @@ if(request.getParameter("failed_answer") != null) {
     </select><br/><br/>
     <input type="text" name="answer" required/><br/><br/>
 	<input type="submit" value="Answer Selected Question"/>
+</form>
+
+
+<!--  Schedules Base on Train Station   -->
+<form method="post" action="employee_search_schedules_logic.jsp">
+	<h6>Schedules Base on Train Station</h6>
+	<select name="station_name" required>
+	<%
+    for(Station station : stations) {
+    %><option value="<% out.print(station.getName()); %>"><% out.print(station.getName());%></option>
+    
+    <%}%>
+    </select><br/><br/>
+	<input type="submit" value="View Schedules"/>
 </form>
 
 <form method="post" action="./../logout_logic.jsp">

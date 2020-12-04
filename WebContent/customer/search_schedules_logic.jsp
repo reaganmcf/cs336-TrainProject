@@ -28,7 +28,6 @@ Date d = new Date(Integer.parseInt(date_year) - 1900, Integer.parseInt(date_mont
 <table style="border: 1px solid black">
 <%
 ArrayList<SpecialSchedule> ret = ApplicationDB.getInstance().SearchSchedules(origin, destination, d);
-out.print(ret.size());
 out.print(Constants.SPECIAL_SCHEDULE_TABLE_HEADERS);
 for(int i = 0; i < ret.size(); i++) {
 	out.print(ret.get(i).toTableString());

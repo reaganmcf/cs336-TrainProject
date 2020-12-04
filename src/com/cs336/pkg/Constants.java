@@ -45,6 +45,15 @@ public class Constants {
 			"<th>End Time</th>"+
 			"<th>Fare</th>";
 	
+	public static final String SCHEDULE_TABLE_HEADERS = 
+			"<th>Schedule ID</th>"+
+			"<th>Origin ID</th>"+
+			"<th>Destination ID</th>"+
+			"<th>Line Name</th>"+
+			"<th>Start Time</th>"+
+			"<th>Train ID</th>";
+			
+	
 	public static final String QUESTIONS_ANSWER_TABLE_HEADERS = 
 			"<th>Question</th>"+
 			"<th>Answer</th>";

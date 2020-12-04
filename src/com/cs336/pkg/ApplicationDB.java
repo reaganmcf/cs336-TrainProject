@@ -947,6 +947,57 @@ public class ApplicationDB {
 	
 	
 	/**
+	 * GetSchedulesOnStationName
+	 * 
+	 * gets all Schedule objects in the database based on the train statioin and returns a list of Schedule objects
+	 * 
+	 * @return ArrayList<Schedule> list of Station objects
+	 */
+	public ArrayList<Schedule> GetSchedulesOnStationName(String stationName) {
+		ArrayList<Schedule> ret = new ArrayList<Schedule>();
+		//If we haven't established a connection, establish one
+		if(connection == null) connection = getConnection();
+		//If we failed to establish a connection, return false
+		if(connection == null) return ret;
+		System.out.println("[GetSchedulesOnStationName] Connected to Database");
+		Statement stmt;
+		try {
+			stmt = connection.createStatement();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return ret;
+		}
+		try {
+			//use the production database
+			stmt.execute("use TrainProject");
+			//run our query
+			stmt.execute(String.format("set @stationID = (select s.stationID from Station s where s.name = '%s')", stationName));
+			stmt.execute(String.format("set @id = CONCAT(%s, @stationID, %s)", "'%,'", "',%'")); 
+			String query = String.format("select * from Schedule s where s.lineName IN (select t.lineName from TrainLine t where t.listStops like @id)");
+			System.out.println("[GetSchedulesOnStationName] running : " + query);
+			
+			ResultSet res = stmt.executeQuery(query);
+			System.out.println("[GetSchedulesOnStationName] Query successfully has data");
+			while(res.next()) {
+				Schedule schedule = new Schedule(
+						res.getInt("schedID"),
+						res.getInt("originID"),
+						res.getInt("destinationID"),
+						res.getString("lineName"),
+						res.getDate("startTime"),
+						res.getInt("tID"));
+				ret.add(schedule);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+//		closeConnection();
+		return ret;
+	}
+	
+	
+	/**
 	 * GetTrainLines
 	 * 
 	 * gets all TrainLine objects in the database and returns a list of TrainLine objects
