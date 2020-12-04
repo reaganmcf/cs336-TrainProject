@@ -3,6 +3,7 @@ package com.cs336.pkg;
 import java.sql.*;
 import java.io.*;
 import java.util.*;
+import java.util.Date;
 
 import javax.servlet.http.HttpSession;
 
@@ -57,57 +58,75 @@ public class ApplicationDB {
 	}
 	
 	/**
-	 * BeerDrinkTestCommad
+	 * LoginAdmin
 	 * 
-	 * Retrieve the data from the test database given to us in the setup. This can be used in place of the real
-	 * commands in order to test our server is working as expected
-	 * 
-	 */
-	public ResultSet BeerDrinkTestCommand() {
-		if(connection == null) connection = getConnection();
-		if(connection == null) return null;
-		Statement stmt;
-		try {
-			stmt = connection.createStatement();
-		} catch (SQLException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-			return null;
-		}
-		ResultSet res;
-		try {
-			//use the test database
-			stmt.execute("use BarBeerDrinkerSample");
-			//run our query
-			res = stmt.executeQuery("select * from beers");
-			
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return null;
-		}
-		
-		return res;
-	}
-	
-	/**
-	 * CheckLogin
-	 * 
-	 * Queries the database to see if a user exists
-	 * If it does, then we also set HttpSession.user with populated instance of CustomerMakes
+	 * Queries the database to see if an admin exists
+	 * If it does, then we also set HttpSession.admin with populated instance of Admin
 	 * 
 	 * @param session the current HttpSession
-	 * @param username the user name of the already existing user
-	 * @param password the password of the already existing user
+	 * @param username the user name of the already existing admin
+	 * @param password the password of the already existing admin
 	 * 
 	 * @return boolean whether or not we successfully logged in or not
 	 */
-	public boolean CheckLogin(HttpSession session, String username, String password) {
+	public boolean LoginAdmin(HttpSession session, String username, String password) {
 		//If we haven't established a connection, establish one
 		if(connection == null) connection = getConnection();
 		//If we failed to establish a connection, return false
 		if(connection == null) return false;
-		System.out.println("[CheckLogin] Connected to Database");
+		System.out.println("[LoginAdmin] Connected to Database");
+		Statement stmt;
+		//Create a SQL statement
+		try {
+			stmt = connection.createStatement();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return false;
+		}
+		ResultSet res;
+		try {
+			//use the production database
+			stmt.execute("use TrainProject");
+			//run our query
+			res = stmt.executeQuery(String.format("SELECT * FROM %s WHERE username = '%s' AND password = '%s'",Constants.ADMIN_TABLE, username, password));
+			if(res.next()) {
+				System.out.println("[LoginAdmin] Query successfully has data");
+				//if there is data in here, create a new CustomerMakes Object and attach it to HttpSession
+				Admin admin = new Admin(
+						res.getString("username"),
+						res.getString("password"));
+				System.out.println("[LoginAdmin] HttpSession." + Constants.HTTP_SESSION_ADMIN + " now has " + admin);
+				session.setAttribute(Constants.HTTP_SESSION_ADMIN, admin);
+				return true;
+			} else {
+				System.out.println("[LoginCustomer] Query returned no data");
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+			
+		return false;	
+	}
+	
+	/**
+	 * LoginCustomer
+	 * 
+	 * Queries the database to see if a customer exists
+	 * If it does, then we also set HttpSession.customer with populated instance of Customer
+	 * 
+	 * @param session the current HttpSession
+	 * @param username the user name of the already existing customer
+	 * @param password the password of the already existing customer
+	 * 
+	 * @return boolean whether or not we successfully logged in or not
+	 */
+	public boolean LoginCustomer(HttpSession session, String username, String password) {
+		//If we haven't established a connection, establish one
+		if(connection == null) connection = getConnection();
+		//If we failed to establish a connection, return false
+		if(connection == null) return false;
+		System.out.println("[LoginCustomer] Connected to Database");
 		Statement stmt;
 		//Create a SQL statement
 		try {
@@ -124,25 +143,19 @@ public class ApplicationDB {
 			//run our query
 			res = stmt.executeQuery(String.format("SELECT * FROM %s WHERE username = '%s' AND password = '%s'",Constants.CUSTOMER_DATABASE, username, password));
 			if(res.next()) {
-				System.out.println("[CheckLogin] Query successfully has data");
+				System.out.println("[LoginCustomer] Query successfully has data");
 				//if there is data in here, create a new CustomerMakes Object and attach it to HttpSession
-				CustomerMakes newUser = new CustomerMakes(
+				Customer customer = new Customer(
 						res.getString("username"),
 						res.getString("email"),
 						res.getString("password"),
 						res.getString("firstName"),
-						res.getString("lastName"),
-						res.getInt("phone"),
-						res.getInt("zipcode"),
-						res.getString("address"),
-						res.getString("city"),
-						res.getString("state"),
-						res.getInt("resNum"));
-				System.out.println("[CheckLogin] HttpSession." + Constants.HTTP_SESSION_USER_KEY + " now has " + newUser);
-				session.setAttribute(Constants.HTTP_SESSION_USER_KEY, newUser);
+						res.getString("lastName"));
+				System.out.println("[LoginCustomer] HttpSession." + Constants.HTTP_SESSION_CUSTOMER + " now has " + customer);
+				session.setAttribute(Constants.HTTP_SESSION_CUSTOMER, customer);
 				return true;
 			} else {
-				System.out.println("[CheckLogin] Query returned no data");
+				System.out.println("[LoginCustomer] Query returned no data");
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -153,10 +166,10 @@ public class ApplicationDB {
 
 	
 	/**
-	 * CreateAccount
+	 * CreateCustomer
 	 * 
-	 * Creates a new account in the database
-	 * If it does, it also sets HttpSession.user representing a successful login
+	 * Creates a new Customer 
+	 * If it does, it also sets HttpSession.customer representing a successful login
 	 *
 	 * @param session the current HttpSession
 	 * @param username the user name of the new user
@@ -164,12 +177,12 @@ public class ApplicationDB {
 	 * 
 	 * @return boolean whether or not the action was successful
 	 */
-	public boolean CreateAccount(HttpSession session, String username, String password) {
+	public boolean CreateCustomer(HttpSession session, String username, String password) {
 		//If we haven't established a connection, establish one
 		if(connection == null) connection = getConnection();
 		//If we failed to establish a connection, return false
 		if(connection == null) return false;
-		System.out.println("[CreateAccount] Connected to Database");
+		System.out.println("[CreateCustomer] Connected to Database");
 		Statement stmt;
 		//Create a SQL statement
 		try {
@@ -185,17 +198,17 @@ public class ApplicationDB {
 			stmt.execute("use TrainProject");
 			//run our query
 			String query = String.format("INSERT INTO %s (username, password) VALUES ('%s', '%s')", Constants.CUSTOMER_DATABASE, username, password);
-			System.out.println("[CreateAccount] running : " + query);
+			System.out.println("[CreateCustomer] running : " + query);
 			res = stmt.executeUpdate(query) > 0;
 			System.out.println(res);
 			if(res) {
-				System.out.println("[CreateAccount] Query successfully has data");
+				System.out.println("[CreateCustomer] Query successfully has data");
 				//if there is data in here, create a new CustomerMakes Object and attach it to HttpSession
-				CustomerMakes newUser = new CustomerMakes(username,password);
-				System.out.println("[CreateAccount] HttpSession." + Constants.HTTP_SESSION_USER_KEY + " now has " + newUser);
-				session.setAttribute(Constants.HTTP_SESSION_USER_KEY, newUser);
+				Customer newUser = new Customer(username,password);
+				System.out.println("[CreateCustomer] HttpSession." + Constants.HTTP_SESSION_CUSTOMER + " now has " + newUser);
+				session.setAttribute(Constants.HTTP_SESSION_CUSTOMER, newUser);
 			} else {
-				System.out.println("[CreateAccount] Failed to create new CustomerMakes");
+				System.out.println("[CreateCustomer] Failed to create new CustomerMakes");
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -203,4 +216,78 @@ public class ApplicationDB {
 			
 		return res;
 	}
+	
+	
+	/**
+	 * SearchSchedules
+	 * 
+	 * Queries the database to see if a customer exists
+	 * If it does, then we also set HttpSession.customer with populated instance of Customer
+	 * 
+	 * @param session the current HttpSession
+	 * @param username the user name of the already existing customer
+	 * @param password the password of the already existing customer
+	 * 
+	 * @return boolean whether or not we successfully logged in or not
+	 */
+	public ArrayList<SpecialSchedule> SearchSchedules(HttpSession session, String originName, String destinationName, java.sql.Date date, String lineName) {
+		//If we haven't established a connection, establish one
+		if(connection == null) connection = getConnection();
+		//If we failed to establish a connection, return false
+		if(connection == null) return null;
+		System.out.println("[SearchSchedules] Connected to Database");
+		Statement stmt;
+		//Create a SQL statement
+		try {
+			stmt = connection.createStatement();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+		ResultSet res;
+		ArrayList<SpecialSchedule> ret = null;
+		try {
+			//use the production database
+			stmt.execute("use TrainProject");
+			stmt.execute(String.format("set @originID = (select s.stationID from Station s where s.name = '%s')", originName));
+			stmt.execute(String.format("set @destinationID = (select s.stationID from Station s where s.name = '%s');", destinationName));
+			String temp = String.format("set @selectedDate = CONCAT('%s', '%s');", date.toString(), "%");
+			System.out.println(temp);
+			stmt.execute(temp);
+			stmt.execute(String.format("set @line = '%s';", lineName));
+			stmt.execute("set @timePerStop = (select t.travelTimeBetweenStops from TrainLine t where t.lineName = @line) + 2;");
+			stmt.execute("set @farePerStop = (select t.farePerStop from TrainLine t where t.lineName = @line);");
+			stmt.execute("set @differenceOrigin= ABS(@originID - (select t.originID from TrainLine t where t.lineName = @line));");
+			stmt.execute("set @differenceDest = ABS(@destinationID - (select t.originID from TrainLine t where t.lineName = @line));");
+			stmt.execute("set @numStops= ABS(@originID-@destinationID);");
+			stmt.execute("set @addOriginTime  = @timePerStop * @differenceOrigin;");
+			stmt.execute("set @addDestinationTime = @timePerStop * @differenceDest;");
+			stmt.execute("set @fare = @farePerStop * @numStops;");
+			res = stmt.executeQuery("select s.schedID, s.tID, DATE_ADD(s.startTime, INTERVAL @addOriginTime MINUTE) as start, DATE_ADD(s.startTime, INTERVAL @addDestinationTime MINUTE) as end, @fare as fare from Schedule s where s.lineName = @line AND s.startTime LIKE @selectedDate;");
+			//run our query
+			ret = new ArrayList<SpecialSchedule>();
+			
+//			if(res.last()) {
+//				System.out.println("[SearchSchedules] Query returned no data");
+//			} else {	
+				while(res.next()) {
+					System.out.println("[SearchSchedules] Query successfully has data");
+					//if there is data in here, create a new CustomerMakes Object and attach it to HttpSession
+					SpecialSchedule spedspec = new SpecialSchedule(
+							res.getInt("schedID"),
+							res.getInt("tID"),
+							res.getString("start"),
+							res.getString("end"),
+							res.getFloat("fare"));
+					ret.add(spedspec);
+				}
+			//}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+			
+		return ret;
+	}
+
 }

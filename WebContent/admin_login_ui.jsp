@@ -4,11 +4,20 @@
 <html>
 <head>
 <meta charset="ISO-8859-1">
-<title>Insert title here</title>
+<title>Admin Login</title>
 </head>
 <body>
-<h1>Create New Account</h1>
-<form method="post" action="check_login.jsp?create=1">
+
+<h2>Admin Login</h2>
+
+<%
+if(request.getParameter("failed") != null) {
+%>
+<p style="color:red"> Failed Login. Please try again. </p>
+<%
+}
+%>
+<form method="post" action="login_account_logic.jsp?type=admin">
 	<table>
 		<tr>
 			<td>	
@@ -23,5 +32,12 @@
 	</table>
 	<input type="submit" value="Login!">
 </form>
+
+<br>
+
+<form method="post" action="create_account_logic.jsp?type=customer">
+	<input type="submit" name="createAccount" value="Create Account">
+</form>
+
 </body>
 </html>

@@ -5,14 +5,14 @@
 <html>
 <head>
 <meta charset="ISO-8859-1">
-<title>Logout</title>
+<title>Insert title here</title>
 </head>
 <body>
 
 <%
-request.getSession().setAttribute(Constants.HTTP_SESSION_USER_KEY, null);
+//invalidate session and redirect to main dispatch
 request.getSession().invalidate();
-response.sendRedirect(Constants.LOGIN_PAGE_REDIRECT_URL);
+response.sendRedirect(Constants.INDEX_PATH_REDIRECT_URL);
 %>
 
 </body>
