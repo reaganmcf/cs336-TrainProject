@@ -57,6 +57,8 @@ public class ApplicationDB {
 		}
 	}
 	
+	
+	
 	/**
 	 * LoginAdmin
 	 * 
@@ -105,9 +107,11 @@ public class ApplicationDB {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-			
+//		closeConnection();
 		return false;	
 	}
+	
+	
 	
 	/**
 	 * LoginCustomer
@@ -141,7 +145,7 @@ public class ApplicationDB {
 			//use the production database
 			stmt.execute("use TrainProject");
 			//run our query
-			res = stmt.executeQuery(String.format("SELECT * FROM %s WHERE username = '%s' AND password = '%s'",Constants.CUSTOMER_DATABASE, username, password));
+			res = stmt.executeQuery(String.format("SELECT * FROM %s WHERE username = '%s' AND password = '%s'",Constants.CUSTOMER_TABLE, username, password));
 			if(res.next()) {
 				System.out.println("[LoginCustomer] Query successfully has data");
 				//if there is data in here, create a new CustomerMakes Object and attach it to HttpSession
@@ -160,24 +164,81 @@ public class ApplicationDB {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-			
+//		closeConnection();
+		return false;	
+	}
+	
+	
+	
+	/**
+	 * LoginEmployee
+	 * 
+	 * Queries the database to see if an employee exists
+	 * If it does, then we also set HttpSession.employee with populated instance of Employee
+	 * 
+	 * @param session the current HttpSession
+	 * @param username the user name of the already existing customer
+	 * @param password the password of the already existing customer
+	 * 
+	 * @return boolean whether or not we successfully logged in or not
+	 */
+	public boolean LoginEmployee(HttpSession session, String username, String password) {
+		//If we haven't established a connection, establish one
+		if(connection == null) connection = getConnection();
+		//If we failed to establish a connection, return false
+		if(connection == null) return false;
+		System.out.println("[LoginEmployee] Connected to Database");
+		Statement stmt;
+		//Create a SQL statement
+		try {
+			stmt = connection.createStatement();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return false;
+		}
+		ResultSet res;
+		try {
+			//use the production database
+			stmt.execute("use TrainProject");
+			//run our query
+			res = stmt.executeQuery(String.format("SELECT * FROM %s WHERE username = '%s' AND password = '%s'",Constants.EMPLOYEE_TABLE, username, password));
+			if(res.next()) {
+				System.out.println("[LoginEmployee] Query successfully has data");
+				//if there is data in here, create a new CustomerMakes Object and attach it to HttpSession
+				Employee employee = new Employee(
+						res.getString("SSN"),
+						res.getString("username"),
+						res.getString("password"),
+						res.getString("firstName"),
+						res.getString("lastName"));
+				System.out.println("[LoginEmployee] HttpSession." + Constants.HTTP_SESSION_EMPLOYEE + " now has " + employee);
+				session.setAttribute(Constants.HTTP_SESSION_EMPLOYEE, employee);
+				return true;
+			} else {
+				System.out.println("[LoginEmployee] Query returned no data");
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+//		closeConnection();
 		return false;	
 	}
 
+	
 	
 	/**
 	 * CreateCustomer
 	 * 
 	 * Creates a new Customer 
-	 * If it does, it also sets HttpSession.customer representing a successful login
-	 *
-	 * @param session the current HttpSession
+	 * Returns the status of the operation (success or failure)
+	 * 
 	 * @param username the user name of the new user
 	 * @param password the password of the new user
 	 * 
 	 * @return boolean whether or not the action was successful
 	 */
-	public boolean CreateCustomer(HttpSession session, String username, String password) {
+	public boolean CreateCustomer(String username, String password, String email, String firstName, String lastName) {
 		//If we haven't established a connection, establish one
 		if(connection == null) connection = getConnection();
 		//If we failed to establish a connection, return false
@@ -197,25 +258,70 @@ public class ApplicationDB {
 			//use the production database
 			stmt.execute("use TrainProject");
 			//run our query
-			String query = String.format("INSERT INTO %s (username, password) VALUES ('%s', '%s')", Constants.CUSTOMER_DATABASE, username, password);
+			String query = String.format("INSERT INTO %s (username, password, email, firstName, lastName) VALUES ('%s', '%s', '%s', '%s', '%s');", Constants.CUSTOMER_TABLE, username, password, email, firstName, lastName);
 			System.out.println("[CreateCustomer] running : " + query);
 			res = stmt.executeUpdate(query) > 0;
 			System.out.println(res);
 			if(res) {
 				System.out.println("[CreateCustomer] Query successfully has data");
-				//if there is data in here, create a new CustomerMakes Object and attach it to HttpSession
-				Customer newUser = new Customer(username,password);
-				System.out.println("[CreateCustomer] HttpSession." + Constants.HTTP_SESSION_CUSTOMER + " now has " + newUser);
-				session.setAttribute(Constants.HTTP_SESSION_CUSTOMER, newUser);
 			} else {
 				System.out.println("[CreateCustomer] Failed to create new CustomerMakes");
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-			
+//		closeConnection();	
 		return res;
 	}
+	
+	
+	
+	/**
+	 * CreateEmployee
+	 * 
+	 * Creates a new Employee 
+	 * @param username the user name of the new user
+	 * @param password the password of the new user
+	 * 
+	 * @return boolean whether or not the action was successful
+	 */
+	public boolean CreateEmployee(String SSN, String username, String password, String firstName, String lastName) {
+		//If we haven't established a connection, establish one
+		if(connection == null) connection = getConnection();
+		//If we failed to establish a connection, return false
+		if(connection == null) return false;
+		System.out.println("[CreateEmployee] Connected to Database");
+		Statement stmt;
+		//Create a SQL statement
+		if(SSN.length() != 11) return false;
+		try {
+			stmt = connection.createStatement();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return false;
+		}
+		boolean res = false;
+		try {
+			//use the production database
+			stmt.execute("use TrainProject");
+			//run our query
+			String query = String.format("INSERT INTO %s (SSN, username, password, firstName, lastName) VALUES ('%s', '%s', '%s', '%s', '%s');", Constants.EMPLOYEE_TABLE, SSN, username, password, firstName, lastName);
+			System.out.println("[CreateEmployee] running : " + query);
+			res = stmt.executeUpdate(query) > 0;
+			System.out.println(res);
+			if(res) {
+				System.out.println("[CreateEmployee] Query successfully has data");
+			} else {
+				System.out.println("[CreateEmployee] Failed to create new CustomerMakes");
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+//		closeConnection();
+		return res;
+	}
+	
 	
 	
 	/**
@@ -252,9 +358,7 @@ public class ApplicationDB {
 			stmt.execute("use TrainProject");
 			stmt.execute(String.format("set @originID = (select s.stationID from Station s where s.name = '%s')", originName));
 			stmt.execute(String.format("set @destinationID = (select s.stationID from Station s where s.name = '%s');", destinationName));
-			String temp = String.format("set @selectedDate = CONCAT('%s', '%s');", date.toString(), "%");
-			System.out.println(temp);
-			stmt.execute(temp);
+			stmt.execute(String.format("set @selectedDate = CONCAT('%s', '%s');", date.toString(), "%"));
 			stmt.execute(String.format("set @line = '%s';", lineName));
 			stmt.execute("set @timePerStop = (select t.travelTimeBetweenStops from TrainLine t where t.lineName = @line) + 2;");
 			stmt.execute("set @farePerStop = (select t.farePerStop from TrainLine t where t.lineName = @line);");
@@ -268,9 +372,9 @@ public class ApplicationDB {
 			//run our query
 			ret = new ArrayList<SpecialSchedule>();
 			
-//			if(res.last()) {
-//				System.out.println("[SearchSchedules] Query returned no data");
-//			} else {	
+			if(res.last()) {
+				System.out.println("[SearchSchedules] Query returned no data");
+			} else {	
 				while(res.next()) {
 					System.out.println("[SearchSchedules] Query successfully has data");
 					//if there is data in here, create a new CustomerMakes Object and attach it to HttpSession
@@ -282,11 +386,11 @@ public class ApplicationDB {
 							res.getFloat("fare"));
 					ret.add(spedspec);
 				}
-			//}
+			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-			
+//		closeConnection();
 		return ret;
 	}
 

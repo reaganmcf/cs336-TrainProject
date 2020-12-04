@@ -8,8 +8,9 @@ public class Constants {
 	public static final String CONNECTION_URL = "jdbc:mysql://cs336trainproject.chmy4phgdopi.us-east-1.rds.amazonaws.com:3306/?allowMultipleQueries=true";
 	public static final String ADMIN_USERNAME = "admin";
 	public static final String ADMIN_PASSWORD = "SuperSecurePassword12345";
-	public static final String CUSTOMER_DATABASE = "Customer";
+	public static final String CUSTOMER_TABLE = "Customer";
 	public static final String ADMIN_TABLE = "Admin";
+	public static final String EMPLOYEE_TABLE = "Employee";
 	
 	//Redirect Strings
 	public static final String PROJECT_PATH_NAME = "/cs336Sample";
@@ -17,10 +18,12 @@ public class Constants {
 	public static final String INDEX_PATH_REDIRECT_URL = PROJECT_PATH_NAME + "/index.jsp";
 	public static final String CUSTOMER_INDEX_REDIRECT_URL = PROJECT_PATH_NAME + "/customer_index.jsp";
 	public static final String CUSTOMER_LOGIN_PAGE_REDIRECT_URL = PROJECT_PATH_NAME + "/customer_login_ui.jsp";
+	public static final String CUSTOMER_CREATE_PAGE_REDIRECT_URL = PROJECT_PATH_NAME + "/create_customer_ui.jsp";
 	public static final String ADMIN_INDEX_REDIRECT_URL = PROJECT_PATH_NAME + "/admin_index.jsp";
 	public static final String ADMIN_LOGIN_PAGE_REDIRECT_URL = PROJECT_PATH_NAME + "/admin_login_ui.jsp";
 	public static final String EMPLOYEE_INDEX_REDIRECT_URL = PROJECT_PATH_NAME + "/employee_index.jsp";
 	public static final String EMPLOYEE_LOGIN_PAGE_REDIRECT_URL = PROJECT_PATH_NAME + "/employee_login_ui.jsp";
+	public static final String EMPLOYEE_CREATE_PAGE_REDIRECT_URL = PROJECT_PATH_NAME + "/create_employee_ui.jsp";
 	
 	//Table Headers so we don't have to write them out manually all the time
 	public static final String CUSTOMER_TABLE_HEADERS = 
@@ -41,6 +44,7 @@ public class Constants {
 	
 	//Get Params
 	public static final String LOGIN_ACCOUNT_PARAMETER = "type";
+	public static final String CREATE_ACCOUNT_PARAMETER = "type";
 	
 	//HttpSession Attributes
 	public static final String HTTP_SESSION_CUSTOMER = "customer";

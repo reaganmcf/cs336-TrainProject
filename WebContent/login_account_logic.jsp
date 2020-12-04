@@ -52,7 +52,23 @@ if(type == null) {
 		response.sendRedirect(Constants.ADMIN_LOGIN_PAGE_REDIRECT_URL + "?failed=true");
 	}
 } else if(type.equals("employee")) {
-	
+	System.out.println("[login_account_logic.jsp::employee] attempting to log in");
+	try {
+		String username = request.getParameter("username").toString();
+		String password = request.getParameter("password").toString();
+		boolean result = ApplicationDB.getInstance().LoginEmployee(request.getSession(), username, password);
+		if(result) {
+			System.out.println("[login_account_logic.jsp::employee] Successfully logged in user; Redirecting to employeeindex");
+			response.sendRedirect(Constants.EMPLOYEE_INDEX_REDIRECT_URL);
+		} else {
+			System.out.println("[login_account_logic.jsp::employee] login failed. Redirecting to login employee");
+			response.sendRedirect(Constants.EMPLOYEE_LOGIN_PAGE_REDIRECT_URL + "?failed=true");
+		}
+	} catch (Exception e) {
+		System.out.println(e);
+		System.out.println("[login_account_logic.jsp::employee] login failed. Redirecting to login employee");
+		response.sendRedirect(Constants.EMPLOYEE_LOGIN_PAGE_REDIRECT_URL + "?failed=true");
+	}
 } else {
 	//redirect to dispatcher
 	System.out.println("[login_account_logic.jsp] no param - redirecting to dispatch");

@@ -10,13 +10,14 @@
 
 <h2>Customer Login</h2>
 
-<%
-if(request.getParameter("failed") != null) {
-%>
+<%if(request.getParameter("failed") != null) {%>
 <p style="color:red"> Failed Login. Please try again. </p>
-<%
-}
-%>
+<%}%>
+
+<%if(request.getParameter("just_created") != null) {%>
+<p style="color:green"> Successfully created Customer. You may now log in.</p>
+<%}%>
+
 <form method="post" action="login_account_logic.jsp?type=customer">
 	<table>
 		<tr>
@@ -35,7 +36,7 @@ if(request.getParameter("failed") != null) {
 
 <br>
 
-<form method="post" action="create_account_logic.jsp?type=customer">
+<form method="post" action="create_customer_ui.jsp">
 	<input type="submit" name="createAccount" value="Create Account">
 </form>
 
