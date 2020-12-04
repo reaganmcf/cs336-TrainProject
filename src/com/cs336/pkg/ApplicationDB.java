@@ -663,6 +663,52 @@ public class ApplicationDB {
 	
 	
 	/**
+	 * GetMonthlySales
+	 * 
+	 * Gets total sales for a given month
+	 * 
+	 * @return boolean status of the operation
+	 */
+	public float GetMonthlySales(String year, String month) {
+		//If we haven't established a connection, establish one
+		if(connection == null) connection = getConnection();
+		//If we failed to establish a connection, return false
+		if(connection == null) return 0;
+		System.out.println("[GetMonthlySales] Connected to Database");
+		Statement stmt;
+		try {
+			stmt = connection.createStatement();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return 0;
+		}
+		try {
+			//use the production database
+			stmt.execute("use TrainProject");
+			//run our query
+			String query = String.format("select sum(r.totalFare) as totalSum from %s r where r.date like '%s';", Constants.RESERVATION_TABLE, year + "-" + month + "%");
+			System.out.println("[GetMonthlySales] running : " + query);
+			
+			ResultSet res = stmt.executeQuery(query);
+			if(res.next()) {
+				System.out.println("[GetMonthlySales] Query successfully has data");
+				return res.getFloat("totalSum");
+			} else {
+				System.out.println("[GetMonthlySales] Query failed to update question with new answer in the table");
+			}
+			stmt.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		//closeConnection();
+		return 0;
+	}
+	
+	
+	
+	
+	/**
 	 * GetStations
 	 * 
 	 * gets all Station objects in the database and returns a list of Station objects
@@ -917,9 +963,6 @@ public class ApplicationDB {
 //		closeConnection();
 		return ret;
 	}
-	
-	
-	
 	
 	/**
 	 * SearchSchedules

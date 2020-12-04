@@ -91,6 +91,19 @@ out.print(admin.getUsername());
 
 
 
+<!--   Sales based on a given month   -->
+<form method="post" action="obtain_monthly_sales_logic.jsp">
+	<h4>Sales for a given year and month</h4>
+	<p>Year</p>
+	<input type="text" name="year" maxlength=4 placeholder="2020" required/>
+	<p>Month (1-12)</p>
+	<input type="text" name="month" maxlength=2 placeholder="12" required/>
+	<br/><br/>
+	<input type="submit" value="View Sales"/>
+</form>
+
+
+
 
 <!--  LOGOUT  -->
 <form method="post" action="./../logout_logic.jsp">
