@@ -12,18 +12,15 @@
 
 <%
 //Now that we are authenticated, start pulling data we need
-ArrayList<QA> questions = ApplicationDB.getInstance().GetQuestions();
-request.getSession().setAttribute(Constants.HTTP_SESSION_QA_LIST, questions);
+ArrayList<QA> questions = new ArrayList<QA>();
 
-String[] kw  = {};
-if(request.getParameter("keywords") != null) {
-	kw = request.getParameter("keywords").split("\\,");
-	
-	out.print("keywords:");
-	for(String k : kw) {
-		out.println(k);
-	}
+String keyword = request.getParameter("keyword");
+if(keyword == null) {
+	questions = ApplicationDB.getInstance().GetQuestions();	
+} else {
+	questions = ApplicationDB.getInstance().GetQuestionsByKeyword(keyword);
 }
+request.getSession().setAttribute(Constants.HTTP_SESSION_QA_LIST, questions);
 %>
 
 <table>

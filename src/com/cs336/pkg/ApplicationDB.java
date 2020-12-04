@@ -164,7 +164,7 @@ public class ApplicationDB {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-//		closeConnection();
+		//closeConnection();
 		return false;	
 	}
 	
@@ -411,10 +411,10 @@ public class ApplicationDB {
 			//use the production database
 			stmt.execute("use TrainProject");
 			//run our query
-			String query = String.format("");
+			String query = String.format("UPDATE %s SET SSN='%s', username='%s', password='%s', firstName='%s', lastName='%s' WHERE SSN = '%s'",
+						Constants.EMPLOYEE_TABLE, SSN, username, password, firstName, lastName, SSN);
 			System.out.println("[EditEmployee] running : " + query);
 			res = stmt.executeUpdate(query) > 0;
-			System.out.println(res);
 			if(res) {
 				System.out.println("[EditEmployee] Query successfully has data");
 			} else {
@@ -526,6 +526,54 @@ public class ApplicationDB {
 	
 	
 	/**
+	 * GetQuestionsByKeyword
+	 * 
+	 * gets all QA objects in the database and returns a list of QA objects
+	 * 
+	 * @return ArrayList<QA> list of QA objects
+	 */
+	public ArrayList<QA> GetQuestionsByKeyword(String keyword) {
+		//If we haven't established a connection, establish one
+		if(connection == null) connection = getConnection();
+		//If we failed to establish a connection, return false
+		if(connection == null) return null;
+		System.out.println("[GetQuestionsByKeyword] Connected to Database");
+		Statement stmt;
+		try {
+			stmt = connection.createStatement();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+		ArrayList<QA> ret = new ArrayList<QA>();
+		try {
+			//use the production database
+			stmt.execute("use TrainProject");
+			//run our query
+			stmt.execute(String.format("set @keyword = CONCAT('%s', '%s');", "%" + keyword + "%", "%"));
+			String query = String.format("SELECT * FROM %s q WHERE q.question like @keyword;", Constants.QA_TABLE);
+			System.out.println("[GetQuestionsByKeyword] running : " + query);
+			
+			ResultSet res = stmt.executeQuery(query);
+			System.out.println("[GetQuestionsByKeyword] Query successfully has data");
+			while(res.next()) {
+				System.out.println(res.getString("question"));
+				QA qa = new QA(
+						res.getString("question"),
+						res.getString("answer"));
+				ret.add(qa);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+//		closeConnection();
+		return ret;
+	}
+	
+	
+	
+	/**
 	 * SendQuestion
 	 * 
 	 * Insert new question into database
@@ -604,11 +652,111 @@ public class ApplicationDB {
 			} else {
 				System.out.println("[AnswerQuestion] Query failed to update question with new answer in the table");
 			}
+			stmt.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		//closeConnection();
+		return res;
+	}
+	
+	
+	
+	/**
+	 * GetStations
+	 * 
+	 * gets all Station objects in the database and returns a list of Station objects
+	 * 
+	 * @return ArrayList<Station> list of Station objects
+	 */
+	public ArrayList<Station> GetStations() {
+		//If we haven't established a connection, establish one
+		if(connection == null) connection = getConnection();
+		//If we failed to establish a connection, return false
+		if(connection == null) return null;
+		System.out.println("[GetStations] Connected to Database");
+		Statement stmt;
+		try {
+			stmt = connection.createStatement();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+		ArrayList<Station> ret = new ArrayList<Station>();
+		try {
+			//use the production database
+			stmt.execute("use TrainProject");
+			//run our query
+			String query = String.format("SELECT * FROM %s", Constants.STATION_TABLE);
+			System.out.println("[GetStations] running : " + query);
+			
+			ResultSet res = stmt.executeQuery(query);
+			System.out.println("[GetStations] Query successfully has data");
+			while(res.next()) {
+				Station station = new Station(
+						res.getInt("stationID"),
+						res.getString("name"),
+						res.getString("city"),
+						res.getString("state"));
+				ret.add(station);
+			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 //		closeConnection();
-		return res;
+		return ret;
+	}
+	
+	
+	
+	/**
+	 * GetTrainLines
+	 * 
+	 * gets all TrainLine objects in the database and returns a list of TrainLine objects
+	 * 
+	 * @return ArrayList<TrainLine> list of TrainLine objects
+	 */
+	public ArrayList<TrainLine> GetTrainLines() {
+		//If we haven't established a connection, establish one
+		if(connection == null) connection = getConnection();
+		//If we failed to establish a connection, return false
+		if(connection == null) return null;
+		System.out.println("[GetTrainLines] Connected to Database");
+		Statement stmt;
+		try {
+			stmt = connection.createStatement();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+		ArrayList<TrainLine> ret = new ArrayList<TrainLine>();
+		try {
+			//use the production database
+			stmt.execute("use TrainProject");
+			//run our query
+			String query = String.format("SELECT * FROM %s", Constants.TRAIN_LINE_TABLE);
+			System.out.println("[GetTrainLines] running : " + query);
+			
+			ResultSet res = stmt.executeQuery(query);
+			System.out.println("[GetTrainLines] Query successfully has data");
+			while(res.next()) {
+				TrainLine trainline = new TrainLine(
+						res.getString("lineName"),
+						res.getInt("travelTimeBetweenStops"),
+						res.getInt("totalTime"),
+						res.getString("listStops"),
+						res.getFloat("farePerStop"),
+						res.getInt("originID"),
+						res.getInt("destinationID"));
+				ret.add(trainline);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+//		closeConnection();
+		return ret;
 	}
 	
 	
@@ -626,7 +774,7 @@ public class ApplicationDB {
 	 * 
 	 * @return ArrayList<SpecialSchedule> list of SpecialSchedule objects
 	 */
-	public ArrayList<SpecialSchedule> SearchSchedules(String originName, String destinationName, java.sql.Date date, String lineName) {
+	public ArrayList<SpecialSchedule> SearchSchedules(String originName, String destinationName, java.sql.Date date) {
 		//If we haven't established a connection, establish one
 		if(connection == null) connection = getConnection();
 		//If we failed to establish a connection, return false
@@ -642,16 +790,20 @@ public class ApplicationDB {
 			return null;
 		}
 		ResultSet res;
-		ArrayList<SpecialSchedule> ret = null;
+		ArrayList<SpecialSchedule> ret = new ArrayList<SpecialSchedule>();
 		try {
 			//use the production database
 			stmt.execute("use TrainProject");
 			stmt.execute(String.format("set @originID = (select s.stationID from Station s where s.name = '%s')", originName));
 			stmt.execute(String.format("set @destinationID = (select s.stationID from Station s where s.name = '%s');", destinationName));
+			stmt.execute(String.format("set @stops = CONCAT('%s', @originID, '%s', @destinationID, '%s')", "%,", ",%,", ",%")); 	
 			stmt.execute(String.format("set @selectedDate = CONCAT('%s', '%s');", date.toString(), "%"));
-			stmt.execute(String.format("set @line = '%s';", lineName));
+			stmt.execute(String.format("set @line = (select lineName from TrainLine where listStops LIKE @stops)"));
+			System.out.println("penis1");
 			stmt.execute("set @timePerStop = (select t.travelTimeBetweenStops from TrainLine t where t.lineName = @line) + 2;");
+			System.out.println("penis2");
 			stmt.execute("set @farePerStop = (select t.farePerStop from TrainLine t where t.lineName = @line);");
+			System.out.println("penis3");
 			stmt.execute("set @differenceOrigin= ABS(@originID - (select t.originID from TrainLine t where t.lineName = @line));");
 			stmt.execute("set @differenceDest = ABS(@destinationID - (select t.originID from TrainLine t where t.lineName = @line));");
 			stmt.execute("set @numStops= ABS(@originID-@destinationID);");

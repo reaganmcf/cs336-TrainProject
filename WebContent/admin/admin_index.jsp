@@ -18,7 +18,7 @@ if(request.getParameter("deleted_employee") != null) {
 	} else {
 		%><p style="color:green">Successfully deleted Representative</p><%
 	}
-} else if(request.getParameter("edited_employee") != null) {
+} else if(request.getParameter("employee_editied") != null) {
 	%><p style="color:green">Successfully Edited Employee</p><%
 }
 %>

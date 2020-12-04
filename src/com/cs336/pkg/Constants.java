@@ -12,6 +12,8 @@ public class Constants {
 	public static final String ADMIN_TABLE = "Admin";
 	public static final String EMPLOYEE_TABLE = "Employee";
 	public static final String QA_TABLE = "QA";
+	public static final String STATION_TABLE = "Station";
+	public static final String TRAIN_LINE_TABLE = "TrainLine";
 	
 	//Redirect Strings
 	public static final String PROJECT_PATH_NAME = "/cs336Sample";
@@ -36,7 +38,6 @@ public class Constants {
 			"<th>lastName</th>";
 	
 	public static final String SPECIAL_SCHEDULE_TABLE_HEADERS = 
-			"<th>Select</th>"+
 			"<th>Schedule ID</th>"+
 			"<th>Train ID</th>"+
 			"<th>Start Time</th>"+
@@ -58,6 +59,8 @@ public class Constants {
 	public static final String HTTP_SESSION_EMPLOYEE = "employee";
 	public static final String HTTP_SESSION_EMPLOYEE_LIST = "employee_list";
 	public static final String HTTP_SESSION_QA_LIST = "question_list";
+	public static final String HTTP_SESSION_STATION_LIST = "station_list";
+	public static final String HTTP_SESSION_TRAIN_LINE_LIST = "trianline_list";
 	
 
 

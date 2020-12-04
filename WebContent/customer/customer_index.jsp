@@ -21,6 +21,14 @@ if(customer == null) {
 }
 
 out.print(customer.getEmail());
+
+
+//load some data
+ArrayList<Station> stations = ApplicationDB.getInstance().GetStations();
+request.getSession().setAttribute(Constants.HTTP_SESSION_STATION_LIST, stations);
+
+ArrayList<TrainLine> trainlines = ApplicationDB.getInstance().GetTrainLines();
+request.getSession().setAttribute(Constants.HTTP_SESSION_TRAIN_LINE_LIST, trainlines);
 %>
 
 <!--  ALERT MESSAGES FROM REDIRECTED PAGES  -->
@@ -40,8 +48,8 @@ if(request.getParameter("failed_send") != null) {
 
 <!--  BROWSE ALL QUESTIONS BY KEYWORD  -->
 <form method="post" action="./../qa/browse.jsp">
-	<h6>Browse Questions by Keyword (comma separated)</h6>
-	<input type="text" name="keywords" required/>
+	<h6>Browse Questions by Keyword</h6>
+	<input type="text" name="keyword" required/>
 	<input type="submit" value="Browse All Questions"/>
 </form>
 
@@ -52,20 +60,46 @@ if(request.getParameter("failed_send") != null) {
 	<input type="submit" value="Submit New Question"/>	
 </form>
 
-<table style="border: 1px solid black">
-<%
-java.sql.Date d = new Date(2020 - 1900, 11, 21);
-ArrayList<SpecialSchedule> ret = ApplicationDB.getInstance().SearchSchedules("Jersey Avenue Station", "Newark Airport", d, "North East Corridor N");
-out.print(Constants.SPECIAL_SCHEDULE_TABLE_HEADERS);
-for(int i = 0; i < ret.size(); i++) {
-	out.print("<tr><checkbox value=" + i + "/>");
-	out.print(ret.get(i).toTableString());
-	out.print("</tr>");
-}
-%>
-</table>
+
+
+<!--  SEARCH TRAIN SCHEDULES  -->
+<form method="post" action="./search_schedules_logic.jsp">
+	<h4>Search for Schedules</h4>
+	<p>Origin</p>
+	<select name="origin" required>
+		<%
+		for(Station s : stations) {
+			%><option value="<% out.print(s.getName());%>"><%out.print(s.getName());%></option>
+		<%}%>
+	</select>
+	
+	<p>Destination</p>
+	<select name="destination" required>
+		 <%
+		for(Station s : stations) {
+			%><option value="<% out.print(s.getName());%>"><%out.print(s.getName());%></option>
+		<%}%>
+	</select>
+	
+	<p>Date Year</p>
+	<input type="text" name="date_year" minlength=4 maxlength=4 required/>
+	
+	<p>Date Month (1-12)</p>
+	<input type="text" name="date_month" minlength=1 maxlength=2 required/>
+	
+	<p>Date Day (1-31)</p>
+	<input type="text" name="date_day" minlength=1 maxlength=2 required/>
+	
+	<br/>
+	<br/>
+	
+	<input type="submit" value="Search for Schedules"/>
+</form>
+
+
 
 <form method="post" action="./../logout_logic.jsp">
+	<h6>Logout</h6>
 	<input type="submit" name="logout" value="Log Out">
 </form>
 

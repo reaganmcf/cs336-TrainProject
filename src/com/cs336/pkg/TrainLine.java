@@ -6,18 +6,24 @@ public class TrainLine {
 	private int totalTime;
 	private String listStops;
 	private float farePerStop;
+	private int originID;
+	private int destinationID;
 	
 	public TrainLine(
 			String lineName,
 			int travelTimeBetweenStop,
 			int totalTime,
 			String listStops,
-			float farePerStop) {
+			float farePerStop,
+			int originID,
+			int destinationID) {
 		this.lineName = lineName;
 		this.travelTimeBetweenStop = travelTimeBetweenStop;
 		this.totalTime = totalTime;
 		this.listStops = listStops;
 		this.farePerStop = farePerStop;
+		this.originID = originID;
+		this.destinationID = destinationID;
 	}
 	
 	public String getLineName() {
@@ -38,6 +44,14 @@ public class TrainLine {
 
 	public float getFarePerStop() {
 		return farePerStop;
+	}
+	
+	public int getOriginID() {
+		return this.originID;
+	}
+	
+	public int getDestinationID() {
+		return this.destinationID;
 	}
 	
 	
