@@ -10,13 +10,19 @@
 
 <h2>Select Account Type</h2>
 <form type="post" action="admin_login_ui.jsp">
-	<input value="Admin" type="submit" style="float: left; width: 33%; height: 200px; margin-top: 50px"/>
+	<div style="float: left; width: 33%; height: 200px; margin-top: 50px">
+		<input value="Admin" type="submit" style="width: 90%; height: 90%"/>
+	</div>
 </form>
 <form type="post" action="customer_login_ui.jsp">
-	<input value="Customer" type="submit" style="float: left; width: 33%; height: 200px; margin-top: 50px"/>
+	<div style="float: left; width: 33%; height: 200px; margin-top: 50px">
+		<input value="Customer" type="submit" style="width: 90%; height: 90%"/>
+	</div>
 </form>
 <form type="post" action="employee_login_ui.jsp">
-	<input value="Customer Representative" type="submit" style="float: left; width: 33%; height: 200px; margin-top: 50px"/>
+	<div style="float: left; width: 33%; height: 200px; margin-top: 50px">
+		<input value="Customer Representative" type="submit" style="width: 90%; height: 90%"/>
+	</div>
 </form>
 
 </body>

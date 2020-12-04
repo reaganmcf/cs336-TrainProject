@@ -24,6 +24,7 @@ public class Constants {
 	public static final String EMPLOYEE_INDEX_REDIRECT_URL = PROJECT_PATH_NAME + "/employee_index.jsp";
 	public static final String EMPLOYEE_LOGIN_PAGE_REDIRECT_URL = PROJECT_PATH_NAME + "/employee_login_ui.jsp";
 	public static final String EMPLOYEE_CREATE_PAGE_REDIRECT_URL = PROJECT_PATH_NAME + "/create_employee_ui.jsp";
+	public static final String EDIT_EMPLOYEE_UI_PAGE = PROJECT_PATH_NAME + "/edit_employee_ui.jsp";
 	
 	//Table Headers so we don't have to write them out manually all the time
 	public static final String CUSTOMER_TABLE_HEADERS = 
@@ -50,6 +51,7 @@ public class Constants {
 	public static final String HTTP_SESSION_CUSTOMER = "customer";
 	public static final String HTTP_SESSION_ADMIN = "admin";
 	public static final String HTTP_SESSION_EMPLOYEE = "employee";
+	public static final String HTTP_SESSION_EMPLOYEE_LIST = "employee_list";
 	
 
 

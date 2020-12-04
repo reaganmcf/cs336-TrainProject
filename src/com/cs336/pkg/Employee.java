@@ -39,6 +39,17 @@ public class Employee {
 	public String getLastName() {
 		return lastName;
 	}
+	
+	@Override 
+	public String toString() {
+		return "<p>" +
+				this.getSSN() + " " +
+				this.getUsername() + " " +
+				this.getPassword() + " " +
+				this.getFirstName() + " " +
+				this.getLastName() + " " +
+				"</p>";
+	}
 
 }
 

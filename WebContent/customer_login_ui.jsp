@@ -37,7 +37,7 @@
 <br>
 
 <form method="post" action="create_customer_ui.jsp">
-	<input type="submit" name="createAccount" value="Create Account">
+	<input type="submit" name="createAccount" value="Create Customer">
 </form>
 
 </body>

@@ -48,7 +48,13 @@ public class Customer {
 	
 	@Override
 	public String toString() {
-		return "{username: '" + this.getUsername() + "', password: '" + this.getPassword() + "'}";
+		return "<p>" +
+				this.getUsername() + " " +
+				this.getEmail() + " " +
+				this.getPassword() + " " +
+				this.getFirstName() + " " +
+				this.getLastName() + " " +
+				"</p>";
 	}
 	
 	public String toTableString() {

@@ -233,8 +233,11 @@ public class ApplicationDB {
 	 * Creates a new Customer 
 	 * Returns the status of the operation (success or failure)
 	 * 
-	 * @param username the user name of the new user
-	 * @param password the password of the new user
+	 * @param String username
+	 * @param String password
+	 * @param String email 
+	 * @param String firstName
+	 * @param String lastName
 	 * 
 	 * @return boolean whether or not the action was successful
 	 */
@@ -280,8 +283,11 @@ public class ApplicationDB {
 	 * CreateEmployee
 	 * 
 	 * Creates a new Employee 
-	 * @param username the user name of the new user
-	 * @param password the password of the new user
+	 * @param String SSN
+	 * @param String username
+	 * @param String password 
+	 * @param String firstName
+	 * @param String lastName 
 	 * 
 	 * @return boolean whether or not the action was successful
 	 */
@@ -325,18 +331,166 @@ public class ApplicationDB {
 	
 	
 	/**
+	 * DeleteEmployee
+	 * 
+	 * Deletes an Employee given the SSN
+	 * @param String SSN
+	 * 
+	 * @return boolean whether or not the action was successful
+	 */
+	public boolean DeleteEmployee(String SSN) {
+		//If we haven't established a connection, establish one
+		if(connection == null) connection = getConnection();
+		//If we failed to establish a connection, return false
+		if(connection == null) return false;
+		System.out.println("[DeleteEmployee] Connected to Database");
+		Statement stmt;
+		//Create a SQL statement
+		if(SSN.length() != 11) return false;
+		try {
+			stmt = connection.createStatement();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return false;
+		}
+		boolean res = false;
+		try {
+			//use the production database
+			stmt.execute("use TrainProject");
+			//run our query
+			String query = String.format("");
+			System.out.println("[DeleteEmployee] running : " + query);
+			res = stmt.executeUpdate(query) > 0;
+			System.out.println(res);
+			if(res) {
+				System.out.println("[DeleteEmployee] Query successfully has data");
+			} else {
+				System.out.println("[DeleteEmployee] Failed to delete employee");
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+//		closeConnection();
+		return res;
+	}
+	
+	
+	
+	/**
+	 * EditEmployee
+	 * 
+	 * Edits an employee with new information
+	 * 
+	 * @param String SSN
+	 * @param String username
+	 * @param String password 
+	 * @param String firstName
+	 * @param String lastName 
+	 * 
+	 * @return boolean whether or not the action was successful
+	 */
+	public boolean EditEmployee(String SSN, String username, String password, String firstName, String lastName) {
+		//If we haven't established a connection, establish one
+		if(connection == null) connection = getConnection();
+		//If we failed to establish a connection, return false
+		if(connection == null) return false;
+		System.out.println("[EditEmployee] Connected to Database");
+		Statement stmt;
+		//Create a SQL statement
+		if(SSN.length() != 11) return false;
+		try {
+			stmt = connection.createStatement();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return false;
+		}
+		boolean res = false;
+		try {
+			//use the production database
+			stmt.execute("use TrainProject");
+			//run our query
+			String query = String.format("");
+			System.out.println("[EditEmployee] running : " + query);
+			res = stmt.executeUpdate(query) > 0;
+			System.out.println(res);
+			if(res) {
+				System.out.println("[EditEmployee] Query successfully has data");
+			} else {
+				System.out.println("[EditEmployee] Failed to delete employee");
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+//		closeConnection();
+		return res;
+	}
+	
+	
+	
+	/**
+	 * getEmployees
+	 * 
+	 * gets all info about employees and returns a list of Employee objects
+	 * 
+	 * @return ArrayList<Employe> list of Employee objects
+	 */
+	public ArrayList<Employee> getEmployees() {
+		//If we haven't established a connection, establish one
+		if(connection == null) connection = getConnection();
+		//If we failed to establish a connection, return false
+		if(connection == null) return null;
+		System.out.println("[getEmployees] Connected to Database");
+		Statement stmt;
+		try {
+			stmt = connection.createStatement();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+		ArrayList<Employee> ret = new ArrayList<Employee>();
+		try {
+			//use the production database
+			stmt.execute("use TrainProject");
+			//run our query
+			String query = String.format("SELECT * FROM %s", Constants.EMPLOYEE_TABLE);
+			System.out.println("[getEmployees] running : " + query);
+			
+			ResultSet res = stmt.executeQuery(query);
+			System.out.println("[getEmployees] Query successfully has data");
+			while(res.next()) {
+				Employee employee = new Employee(
+						res.getString("SSN"),
+						res.getString("username"),
+						res.getString("password"),
+						res.getString("firstName"),
+						res.getString("lastName"));
+				ret.add(employee);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+//		closeConnection();
+		return ret;
+	}
+	
+	
+	
+	/**
 	 * SearchSchedules
 	 * 
-	 * Queries the database to see if a customer exists
-	 * If it does, then we also set HttpSession.customer with populated instance of Customer
+	 * Returns the result of searching for all schedules given the parameters
 	 * 
-	 * @param session the current HttpSession
-	 * @param username the user name of the already existing customer
-	 * @param password the password of the already existing customer
+	 * @param String originName
+	 * @param String destinationName
+	 * @param java.sql.Date date
+	 * @param String lineName
 	 * 
-	 * @return boolean whether or not we successfully logged in or not
+	 * @return ArrayList<SpecialSchedule> list of SpecialSchedule objects
 	 */
-	public ArrayList<SpecialSchedule> SearchSchedules(HttpSession session, String originName, String destinationName, java.sql.Date date, String lineName) {
+	public ArrayList<SpecialSchedule> SearchSchedules(String originName, String destinationName, java.sql.Date date, String lineName) {
 		//If we haven't established a connection, establish one
 		if(connection == null) connection = getConnection();
 		//If we failed to establish a connection, return false
