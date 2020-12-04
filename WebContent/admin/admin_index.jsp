@@ -62,7 +62,7 @@ out.print(admin.getUsername());
 
 
 <!--  LOGOUT  -->
-<form method="post" action="logout_logic.jsp">
+<form method="post" action="./../logout_logic.jsp">
 	<h4>Logout</h4>
 	<input type="submit" name="logout" value="Log Out">
 </form>

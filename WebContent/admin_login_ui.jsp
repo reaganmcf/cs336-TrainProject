@@ -35,9 +35,5 @@ if(request.getParameter("failed") != null) {
 
 <br>
 
-<form method="post" action="create_account_logic.jsp?type=customer">
-	<input type="submit" name="createAccount" value="Create Account">
-</form>
-
 </body>
 </html>

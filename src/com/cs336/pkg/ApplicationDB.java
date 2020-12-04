@@ -434,7 +434,7 @@ public class ApplicationDB {
 	 * 
 	 * gets all info about employees and returns a list of Employee objects
 	 * 
-	 * @return ArrayList<Employe> list of Employee objects
+	 * @return ArrayList<Employee> list of Employee objects
 	 */
 	public ArrayList<Employee> getEmployees() {
 		//If we haven't established a connection, establish one
@@ -468,6 +468,52 @@ public class ApplicationDB {
 						res.getString("firstName"),
 						res.getString("lastName"));
 				ret.add(employee);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+//		closeConnection();
+		return ret;
+	}
+	
+	
+	
+	/**
+	 * GetQuestions
+	 * 
+	 * gets all QA objects in the database and returns a list of QA objects
+	 * 
+	 * @return ArrayList<QA> list of QA objects
+	 */
+	public ArrayList<QA> GetQuestions() {
+		//If we haven't established a connection, establish one
+		if(connection == null) connection = getConnection();
+		//If we failed to establish a connection, return false
+		if(connection == null) return null;
+		System.out.println("[GetQuestions] Connected to Database");
+		Statement stmt;
+		try {
+			stmt = connection.createStatement();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+		ArrayList<QA> ret = new ArrayList<QA>();
+		try {
+			//use the production database
+			stmt.execute("use TrainProject");
+			//run our query
+			String query = String.format("SELECT * FROM %s", Constants.QA_TABLE);
+			System.out.println("[GetQuestions] running : " + query);
+			
+			ResultSet res = stmt.executeQuery(query);
+			System.out.println("[GetQuestions] Query successfully has data");
+			while(res.next()) {
+				QA qa = new QA(
+						res.getString("question"),
+						res.getString("answer"));
+				ret.add(qa);
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -525,22 +571,19 @@ public class ApplicationDB {
 			res = stmt.executeQuery("select s.schedID, s.tID, DATE_ADD(s.startTime, INTERVAL @addOriginTime MINUTE) as start, DATE_ADD(s.startTime, INTERVAL @addDestinationTime MINUTE) as end, @fare as fare from Schedule s where s.lineName = @line AND s.startTime LIKE @selectedDate;");
 			//run our query
 			ret = new ArrayList<SpecialSchedule>();
-			
-			if(res.last()) {
-				System.out.println("[SearchSchedules] Query returned no data");
-			} else {	
-				while(res.next()) {
-					System.out.println("[SearchSchedules] Query successfully has data");
-					//if there is data in here, create a new CustomerMakes Object and attach it to HttpSession
-					SpecialSchedule spedspec = new SpecialSchedule(
-							res.getInt("schedID"),
-							res.getInt("tID"),
-							res.getString("start"),
-							res.getString("end"),
-							res.getFloat("fare"));
-					ret.add(spedspec);
-				}
+		
+			while(res.next()) {
+				System.out.println("[SearchSchedules] Query successfully has data");
+				//if there is data in here, create a new CustomerMakes Object and attach it to HttpSession
+				SpecialSchedule spedspec = new SpecialSchedule(
+						res.getInt("schedID"),
+						res.getInt("tID"),
+						res.getString("start"),
+						res.getString("end"),
+						res.getFloat("fare"));
+				ret.add(spedspec);
 			}
+		
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

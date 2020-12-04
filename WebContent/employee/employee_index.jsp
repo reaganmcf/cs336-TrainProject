@@ -21,7 +21,7 @@ if(employee == null) {
 out.print(employee.getUsername());
 %>
 
-<form method="post" action="logout_logic.jsp">
+<form method="post" action="./../logout_logic.jsp">
 	<input type="submit" name="logout" value="Log Out">
 </form>
 

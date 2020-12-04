@@ -20,13 +20,21 @@ if(customer == null) {
 	response.sendRedirect(Constants.INDEX_PATH_REDIRECT_URL);
 }
 
+
+//Now that we are authenticated, start pulling data we need
+ArrayList<QA> questions = ApplicationDB.getInstance().GetQuestions();
+request.getSession().setAttribute(Constants.HTTP_SESSION_QA_LIST, questions);
+
 out.print(customer.getEmail());
 %>
+
+<!--  BROWSE ALL QUESTIONS  -->
+
 
 <table style="border: 1px solid black">
 <%
 java.sql.Date d = new Date(2020 - 1900, 11, 21);
-ArrayList<SpecialSchedule> ret = ApplicationDB.getInstance().SearchSchedules(request.getSession(), "Jersey Avenue Station", "Newark Airport", d, "North East Corridor N");
+ArrayList<SpecialSchedule> ret = ApplicationDB.getInstance().SearchSchedules("Jersey Avenue Station", "Newark Airport", d, "North East Corridor N");
 out.print(Constants.SPECIAL_SCHEDULE_TABLE_HEADERS);
 for(int i = 0; i < ret.size(); i++) {
 	out.print("<tr><checkbox value=" + i + "/>");
@@ -36,7 +44,7 @@ for(int i = 0; i < ret.size(); i++) {
 %>
 </table>
 
-<form method="post" action="logout_logic.jsp">
+<form method="post" action="./../logout_logic.jsp">
 	<input type="submit" name="logout" value="Log Out">
 </form>
 
