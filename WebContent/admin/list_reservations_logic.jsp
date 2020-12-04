@@ -14,7 +14,7 @@
 String customer_username = request.getParameter("customer_username");
 String transit_line = request.getParameter("transit_line");
 if(customer_username == null && transit_line == null) {
-	System.out.println("[edit_employee_ui.jsp] must not be an admin, redirect to login");
+	System.out.println("[list_reservations_ui.jsp] must not be an admin, redirect to login");
 	response.sendRedirect(Constants.INDEX_PATH_REDIRECT_URL);
 }
 

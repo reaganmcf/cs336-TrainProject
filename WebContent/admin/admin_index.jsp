@@ -91,6 +91,31 @@ out.print(admin.getUsername());
 
 
 
+
+
+
+<!-- LIST REVENUE BY USERNAME -->
+<form method="post" action="list_revenue_logic.jsp?customer_username">
+	<h4>List Revenue By Username</h4>
+	<input type="submit" value="List Revenue"/>
+</form>
+
+<!-- LIST REVENUE BY Train Line -->
+<form method="post" action="list_revenue_logic.jsp?transit_line">
+	<h4>List Revenue By Train Line</h4>
+	<input type="submit" value="List Revenue"/>
+</form>
+
+
+
+
+
+
+
+
+
+
+
 <!--   Sales based on a given month   -->
 <form method="post" action="obtain_monthly_sales_logic.jsp">
 	<h4>Sales for a given year and month</h4>

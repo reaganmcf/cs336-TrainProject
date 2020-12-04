@@ -709,6 +709,102 @@ public class ApplicationDB {
 	
 	
 	/**
+	 * TotalRevenueByCustomer
+	 * 
+	 * groups revenue by customer
+	 * 
+	 * @return ArrayList<ArrayList<String>> list of rows of the result table
+	 */
+	public ArrayList<ArrayList<String>> TotalRevenueByCustomer() {
+		//If we haven't established a connection, establish one
+		if(connection == null) connection = getConnection();
+		//If we failed to establish a connection, return false
+		if(connection == null) return null;
+		System.out.println("[TotalRevenueByCustomer] Connected to Database");
+		Statement stmt;
+		try {
+			stmt = connection.createStatement();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+		ArrayList<ArrayList<String>> ret = new ArrayList<ArrayList<String>>();
+		try {
+			//use the production database
+			stmt.execute("use TrainProject");
+			//run our query
+			String query = String.format("select sum(r.totalFare) as total, c.firstName as firstName, c.lastName as lastName, c.username as username from %s r, %s c where c.username = r.username group by c.username", Constants.RESERVATION_TABLE, Constants.CUSTOMER_TABLE);
+			System.out.println("[TotalRevenueByCustomer] running : " + query);
+			
+			ResultSet res = stmt.executeQuery(query);
+			while(res.next()) {
+				ArrayList<String> t = new ArrayList<String>();
+				t.add(res.getString("total"));
+				t.add(res.getString("firstName"));
+				t.add(res.getString("lastName"));
+				t.add(res.getString("username"));
+				ret.add(t);
+			}
+			System.out.println("[TotalRevenueByCustomer] Query successfully has data");
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		//closeConnection();
+		return ret;
+	}
+	
+	
+	
+	/**
+	 * TotalRevenueByTransitLine
+	 * 
+	 * groups revenue by train line
+	 * 
+	 * @return ArrayList<ArrayList<String>> list of rows of the result table
+	 */
+	public ArrayList<ArrayList<String>> TotalRevenueByTransitLine() {
+		//If we haven't established a connection, establish one
+		if(connection == null) connection = getConnection();
+		//If we failed to establish a connection, return false
+		if(connection == null) return null;
+		System.out.println("[TotalRevenueByTransitLine] Connected to Database");
+		Statement stmt;
+		try {
+			stmt = connection.createStatement();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+		ArrayList<ArrayList<String>> ret = new ArrayList<ArrayList<String>>();
+		try {
+			//use the production database
+			stmt.execute("use TrainProject");
+			//run our query
+			String query = String.format("select sum(r.totalFare) as total, t.lineName as lineName from %s r, %s t where t.lineName = r.lineName group by t.lineName", Constants.RESERVATION_TABLE, Constants.TRAIN_LINE_TABLE);
+			System.out.println("[TotalRevenueByTransitLine] running : " + query);
+			
+			ResultSet res = stmt.executeQuery(query);
+			while(res.next()) {
+				ArrayList<String> t = new ArrayList<String>();
+				t.add(res.getString("total"));
+				t.add(res.getString("lineName"));
+				ret.add(t);
+			}
+			System.out.println("[TotalRevenueByTransitLine] Query successfully has data");
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		//closeConnection();
+		return ret;
+	}
+	
+	
+	
+	
+	
+	/**
 	 * GetStations
 	 * 
 	 * gets all Station objects in the database and returns a list of Station objects

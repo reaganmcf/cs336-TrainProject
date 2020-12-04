@@ -61,6 +61,16 @@ public class Constants {
 			"<th>Child?</th>"+
 			"<th>Senior?</th>"+
 			"<th>Disabled?</th>";
+	
+	public static final String TOTAL_REVENUE_BY_CUSTOMER_TABLE_HEADERS =
+			"<th>Total</th>"+
+			"<th>First Name</th>"+
+			"<th>Last Name</th>"+
+			"<th>Username</th>";
+	
+	public static final String TOTAL_REVENUE_BY_TRAINLINE_TABLE_HEADERS =
+			"<th>Total</th>"+
+			"<th>Line Name</th>";
 					
 	
 	//Get Params
