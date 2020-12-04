@@ -20,16 +20,37 @@ if(customer == null) {
 	response.sendRedirect(Constants.INDEX_PATH_REDIRECT_URL);
 }
 
-
-//Now that we are authenticated, start pulling data we need
-ArrayList<QA> questions = ApplicationDB.getInstance().GetQuestions();
-request.getSession().setAttribute(Constants.HTTP_SESSION_QA_LIST, questions);
-
 out.print(customer.getEmail());
 %>
 
-<!--  BROWSE ALL QUESTIONS  -->
+<!--  ALERT MESSAGES FROM REDIRECTED PAGES  -->
+<%
+if(request.getParameter("failed_send") != null) {
+	%><p style="color:red">Failed to send question. Please try again</p><%
+} else if(request.getParameter("success_send") != null) {
+	%><p style="color:green">Successfully sent question</p><%
+}
+%>
 
+<!--  BROWSE ALL QUESTIONS  -->
+<form method="post" action="./../qa/browse.jsp">
+	<h6>Browse All Questions</h6>
+	<input type="submit" name="sub" value="Browse All Questions"/>
+</form>
+
+<!--  BROWSE ALL QUESTIONS BY KEYWORD  -->
+<form method="post" action="./../qa/browse.jsp">
+	<h6>Browse Questions by Keyword (comma separated)</h6>
+	<input type="text" name="keywords" required/>
+	<input type="submit" value="Browse All Questions"/>
+</form>
+
+<!--  SEND QUESTION TO CUSTOMER SERVICE  -->
+<form method="post" action="./../qa/send_question_logic.jsp">
+	<h6>Submit a new question to Customer Service</h6>
+	<input type="text" name="question" required/>
+	<input type="submit" value="Submit New Question"/>	
+</form>
 
 <table style="border: 1px solid black">
 <%

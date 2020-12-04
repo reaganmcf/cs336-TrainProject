@@ -10,7 +10,7 @@
 </head>
 <body>
 
-<!--  ALERT MESSAGES FROM REDIRECTED PAGS  -->
+<!--  ALERT MESSAGES FROM REDIRECTED PAGES  -->
 <%
 if(request.getParameter("deleted_employee") != null) {
 	if(request.getParameter("deleted_employee").equals("false")) {
@@ -48,7 +48,7 @@ out.print(admin.getUsername());
 <!--  EDIT EMPLOYEE  --> 
 <form method="post" action="edit_employee_ui.jsp">
 <h4> Edit or Delete Employee</h4>
-	<select name="employee_ssn">
+	<select name="employee_ssn" required>
 	<%
     for(Employee e : employees) {
     %><option value="<% out.print(e.getSSN()); %>"><% out.print(e.getSSN() + " - " + e.getFirstName() + " " + e.getLastName()); %></option>

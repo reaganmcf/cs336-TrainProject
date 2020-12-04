@@ -42,6 +42,10 @@ public class Constants {
 			"<th>Start Time</th>"+
 			"<th>End Time</th>"+
 			"<th>Fare</th>";
+	
+	public static final String QUESTIONS_ANSWER_TABLE_HEADERS = 
+			"<th>Question</th>"+
+			"<th>Answer</th>";
 					
 	
 	//Get Params

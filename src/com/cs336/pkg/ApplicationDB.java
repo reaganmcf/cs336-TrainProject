@@ -212,7 +212,7 @@ public class ApplicationDB {
 						res.getString("password"),
 						res.getString("firstName"),
 						res.getString("lastName"));
-				System.out.println("[LoginEmployee] HttpSession." + Constants.HTTP_SESSION_EMPLOYEE + " now has " + employee);
+				System.out.println("[LoginEmployee] HttpSession." + Constants.HTTP_SESSION_EMPLOYEE + " now has " + employee.getSSN());
 				session.setAttribute(Constants.HTTP_SESSION_EMPLOYEE, employee);
 				return true;
 			} else {
@@ -268,7 +268,7 @@ public class ApplicationDB {
 			if(res) {
 				System.out.println("[CreateCustomer] Query successfully has data");
 			} else {
-				System.out.println("[CreateCustomer] Failed to create new CustomerMakes");
+				System.out.println("[CreateCustomer] Failed to create new Customer");
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -319,7 +319,7 @@ public class ApplicationDB {
 			if(res) {
 				System.out.println("[CreateEmployee] Query successfully has data");
 			} else {
-				System.out.println("[CreateEmployee] Failed to create new CustomerMakes");
+				System.out.println("[CreateEmployee] Failed to create new Employee");
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -418,7 +418,7 @@ public class ApplicationDB {
 			if(res) {
 				System.out.println("[EditEmployee] Query successfully has data");
 			} else {
-				System.out.println("[EditEmployee] Failed to delete employee");
+				System.out.println("[EditEmployee] Failed to edit employee");
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -510,6 +510,7 @@ public class ApplicationDB {
 			ResultSet res = stmt.executeQuery(query);
 			System.out.println("[GetQuestions] Query successfully has data");
 			while(res.next()) {
+				System.out.println(res.getString("answer"));
 				QA qa = new QA(
 						res.getString("question"),
 						res.getString("answer"));
@@ -521,6 +522,95 @@ public class ApplicationDB {
 //		closeConnection();
 		return ret;
 	}
+	
+	
+	
+	/**
+	 * SendQuestion
+	 * 
+	 * Insert new question into database
+	 * 
+	 * @return boolean status of the operation
+	 */
+	public boolean SendQuestion(String question) {
+		//If we haven't established a connection, establish one
+		if(connection == null) connection = getConnection();
+		//If we failed to establish a connection, return false
+		if(connection == null) return false;
+		System.out.println("[SendQuestion] Connected to Database");
+		Statement stmt;
+		try {
+			stmt = connection.createStatement();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return false;
+		}
+		boolean res = false;
+		try {
+			//use the production database
+			stmt.execute("use TrainProject");
+			//run our query
+			String query = String.format("INSERT INTO %s (question) VALUES ('%s');", Constants.QA_TABLE, question);
+			System.out.println("[SendQuestion] running : " + query);
+			
+			res = stmt.executeUpdate(query) > 0;
+			if(res) {
+				System.out.println("[SendQuestion] Query successfully has data");
+			} else {
+				System.out.println("[SendQuestion] Query failed to insert new question into table");
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+//		closeConnection();
+		return res;
+	}
+	
+	
+	
+	/**
+	 * AnswerQuestion
+	 * 
+	 * Answers a given question in the QA table
+	 * 
+	 * @return boolean status of the operation
+	 */
+	public boolean AnswerQuestion(String question, String answer) {
+		//If we haven't established a connection, establish one
+		if(connection == null) connection = getConnection();
+		//If we failed to establish a connection, return false
+		if(connection == null) return false;
+		System.out.println("[AnswerQuestion] Connected to Database");
+		Statement stmt;
+		try {
+			stmt = connection.createStatement();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return false;
+		}
+		boolean res = false;
+		try {
+			//use the production database
+			stmt.execute("use TrainProject");
+			//run our query
+			String query = String.format("UPDATE %s SET answer = '%s' WHERE question = '%s';", Constants.QA_TABLE, answer, question);
+			System.out.println("[AnswerQuestion] running : " + query);
+			
+			res = stmt.executeUpdate(query) > 0;
+			if(res) {
+				System.out.println("[AnswerQuestion] Query successfully has data");
+			} else {
+				System.out.println("[AnswerQuestion] Query failed to update question with new answer in the table");
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+//		closeConnection();
+		return res;
+	}
+	
 	
 	
 	

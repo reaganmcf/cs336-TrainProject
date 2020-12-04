@@ -6,7 +6,11 @@ public class QA {
 	
 	public QA(String question, String answer) {
 		this.question = question;
-		this.answer = answer;
+		if(answer == null) {
+			this.answer = "";
+		} else {
+			this.answer = answer;
+		}
 	}
 	
 	public String getQuestion() {
@@ -15,5 +19,12 @@ public class QA {
 	
 	public String getAnswer() {
 		return this.answer;
+	}
+	
+	public String toTableString() {
+		return "<tr>"+
+				"<td>"+this.getQuestion()+"</td>"+
+				"<td>"+this.getAnswer()+"</td>"+
+				"</tr>";
 	}
 }
