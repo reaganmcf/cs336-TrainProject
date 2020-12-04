@@ -85,4 +85,20 @@ public class Reservation {
 		return isDisabled;
 	}
 	
+	public String toTableString() {
+		return "<tr>"+
+				"<td>"+this.getResNum()+"</td>"+
+				"<td>"+this.getTotalFare()+"</td>"+
+				"<td>"+this.getPassenger()+"</td>"+
+				"<td>"+this.getDate().toGMTString()+"</td>"+
+				"<td>"+this.getOriginID()+"</td>"+
+				"<td>"+this.getDestinationID()+"</td>"+
+				"<td>"+this.getLineName()+"</td>"+
+				"<td>"+this.getUsername()+"</td>"+
+				"<td>"+(this.isChild() ? "YES" : "NO")+"</td>"+
+				"<td>"+(this.isSenior() ? "YES" : "NO")+"</td>"+
+				"<td>"+(this.isDisabled() ? "YES" : "NO")+"</td>"+
+				"</tr>";
+	}
+	
 }

@@ -761,6 +761,165 @@ public class ApplicationDB {
 	
 	
 	
+	/**
+	 * GetCustomers
+	 * 
+	 * gets all Customers and returns list of Customer objects
+	 * 
+	 * @return ArrayList<Customer> list of Customer objects
+	 */
+	public ArrayList<Customer> GetCustomers() {
+		//If we haven't established a connection, establish one
+		if(connection == null) connection = getConnection();
+		//If we failed to establish a connection, return false
+		if(connection == null) return null;
+		System.out.println("[GetCustomers] Connected to Database");
+		Statement stmt;
+		try {
+			stmt = connection.createStatement();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+		ArrayList<Customer> ret = new ArrayList<Customer>();
+		try {
+			//use the production database
+			stmt.execute("use TrainProject");
+			//run our query
+			String query = String.format("SELECT * FROM %s", Constants.CUSTOMER_TABLE);
+			System.out.println("[GetCustomers] running : " + query);
+			
+			ResultSet res = stmt.executeQuery(query);
+			System.out.println("[GetCustomers] Query successfully has data");
+			while(res.next()) {
+				Customer customer = new Customer(
+						res.getString("username"),
+						res.getString("password"),
+						res.getString("email"),
+						res.getString("firstName"),
+						res.getString("lastName"));
+				ret.add(customer);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+//		closeConnection();
+		return ret;
+	}
+	
+	
+	
+	/**
+	 * SearchReservationsByUsername
+	 * 
+	 * gets all Reservation objects by user name in the database and returns a list of SearchReservationsByCustomerName objects
+	 * 
+	 * @return ArrayList<Reservation> list of TrainLine objects
+	 */
+	public ArrayList<Reservation> SearchReservationsByUsername(String username) {
+		//If we haven't established a connection, establish one
+		if(connection == null) connection = getConnection();
+		//If we failed to establish a connection, return false
+		if(connection == null) return null;
+		System.out.println("[SearchReservationsByUsername] Connected to Database");
+		Statement stmt;
+		try {
+			stmt = connection.createStatement();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+		ArrayList<Reservation> ret = new ArrayList<Reservation>();
+		try {
+			//use the production database
+			stmt.execute("use TrainProject");
+			//run our query
+			String query = String.format("SELECT * FROM %s r where r.username = '%s'", Constants.RESERVATION_TABLE, username);
+			System.out.println("[SearchReservationsByUsername] running : " + query);
+			
+			ResultSet res = stmt.executeQuery(query);
+			System.out.println("[SearchReservationsByUsername] Query successfully has data");
+			while(res.next()) {
+				Reservation reservation = new Reservation(
+						res.getInt("resNum"),
+						res.getFloat("totalFare"),
+						res.getString("passenger"),
+						res.getDate("date"),
+						res.getInt("originID"),
+						res.getInt("destinationID"),
+						res.getString("lineName"),
+						res.getString("username"),
+						res.getBoolean("isChild"),
+						res.getBoolean("isSenior"),
+						res.getBoolean("isDisabled"));
+				ret.add(reservation);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+//		closeConnection();
+		return ret;
+	}
+	
+	
+	
+	/**
+	 * SearchReservationsByTransitLine
+	 * 
+	 * gets all Reservation objects by transit line in the database and returns a list of SearchReservationsByCustomerName objects
+	 * 
+	 * @return ArrayList<Reservation> list of TrainLine objects
+	 */
+	public ArrayList<Reservation> SearchReservationsByTransitLine(String transit_line) {
+		//If we haven't established a connection, establish one
+		if(connection == null) connection = getConnection();
+		//If we failed to establish a connection, return false
+		if(connection == null) return null;
+		System.out.println("[SearchReservationsByTransitLine] Connected to Database");
+		Statement stmt;
+		try {
+			stmt = connection.createStatement();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+		ArrayList<Reservation> ret = new ArrayList<Reservation>();
+		try {
+			//use the production database
+			stmt.execute("use TrainProject");
+			//run our query
+			String query = String.format("SELECT * FROM %s r where r.lineName = '%s'", Constants.RESERVATION_TABLE, transit_line);
+			System.out.println("[SearchReservationsByTransitLine] running : " + query);
+			
+			ResultSet res = stmt.executeQuery(query);
+			System.out.println("[SearchReservationsByTransitLine] Query successfully has data");
+			while(res.next()) {
+				Reservation reservation = new Reservation(
+						res.getInt("resNum"),
+						res.getFloat("totalFare"),
+						res.getString("passenger"),
+						res.getDate("date"),
+						res.getInt("originID"),
+						res.getInt("destinationID"),
+						res.getString("lineName"),
+						res.getString("username"),
+						res.getBoolean("isChild"),
+						res.getBoolean("isSenior"),
+						res.getBoolean("isDisabled"));
+				ret.add(reservation);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+//		closeConnection();
+		return ret;
+	}
+	
+	
+	
 	
 	/**
 	 * SearchSchedules
@@ -799,11 +958,8 @@ public class ApplicationDB {
 			stmt.execute(String.format("set @stops = CONCAT('%s', @originID, '%s', @destinationID, '%s')", "%,", ",%,", ",%")); 	
 			stmt.execute(String.format("set @selectedDate = CONCAT('%s', '%s');", date.toString(), "%"));
 			stmt.execute(String.format("set @line = (select lineName from TrainLine where listStops LIKE @stops)"));
-			System.out.println("penis1");
 			stmt.execute("set @timePerStop = (select t.travelTimeBetweenStops from TrainLine t where t.lineName = @line) + 2;");
-			System.out.println("penis2");
 			stmt.execute("set @farePerStop = (select t.farePerStop from TrainLine t where t.lineName = @line);");
-			System.out.println("penis3");
 			stmt.execute("set @differenceOrigin= ABS(@originID - (select t.originID from TrainLine t where t.lineName = @line));");
 			stmt.execute("set @differenceDest = ABS(@destinationID - (select t.originID from TrainLine t where t.lineName = @line));");
 			stmt.execute("set @numStops= ABS(@originID-@destinationID);");
@@ -832,5 +988,7 @@ public class ApplicationDB {
 //		closeConnection();
 		return ret;
 	}
+	
+	
 
 }

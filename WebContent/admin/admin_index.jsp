@@ -36,10 +36,11 @@ if(admin == null) {
 ArrayList<Employee> employees = ApplicationDB.getInstance().getEmployees();
 request.getSession().setAttribute(Constants.HTTP_SESSION_EMPLOYEE_LIST, employees);
 
-for(Employee e : employees) {
-	out.println(e);
-}
+ArrayList<TrainLine> train_line_list = ApplicationDB.getInstance().GetTrainLines();
+request.getSession().setAttribute(Constants.HTTP_SESSION_TRAIN_LINE_LIST, train_line_list);
 
+ArrayList<Customer> customer_list = ApplicationDB.getInstance().GetCustomers();
+request.getSession().setAttribute(Constants.HTTP_SESSION_CUSTOMER_LIST, customer_list);
 out.print(admin.getUsername());
 %>
 
@@ -57,6 +58,36 @@ out.print(admin.getUsername());
     </select><br/><br/>
 	<input type="submit" value="Edit or Delete Employee"/>
 </form>
+
+
+
+
+
+<!-- LIST RESERVATIONS BY USERNAME -->
+<form method="post" action="list_reservations_logic.jsp">
+	<h4>List Reservations By Username</h4>
+	<select name="customer_username" required>
+	<%
+    for(Customer c : customer_list) {
+    %><option value="<% out.print(c.getUsername()); %>"><% out.print(c.getUsername());%></option>
+    
+    <%}%>
+    </select><br/><br/>
+	<input type="submit" value="List Reservations"/>
+</form>
+
+<!-- LIST RESERVATIONS BY Train Line -->
+<form method="post" action="list_reservations_logic.jsp">
+	<h4>List Reservations By Train Line</h4>
+	<select name="transit_line" required>
+	<%
+	for(TrainLine t : train_line_list) {
+    %><option value="<% out.print(t.getLineName()); %>"><% out.print(t.getLineName());%></option>
+    <%}%>
+    </select><br/><br/>
+	<input type="submit" value="List Reservations"/>
+</form>
+
 
 
 

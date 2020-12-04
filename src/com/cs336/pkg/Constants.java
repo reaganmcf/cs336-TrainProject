@@ -14,6 +14,7 @@ public class Constants {
 	public static final String QA_TABLE = "QA";
 	public static final String STATION_TABLE = "Station";
 	public static final String TRAIN_LINE_TABLE = "TrainLine";
+	public static final String RESERVATION_TABLE = "Reservation";
 	
 	//Redirect Strings
 	public static final String PROJECT_PATH_NAME = "/cs336Sample";
@@ -47,6 +48,19 @@ public class Constants {
 	public static final String QUESTIONS_ANSWER_TABLE_HEADERS = 
 			"<th>Question</th>"+
 			"<th>Answer</th>";
+	
+	public static final String RESERVATION_TABLE_HEADERS =
+			"<th>Reservation Number</th>"+
+			"<th>Total Fare</th>"+
+			"<th>Passenger</th>"+
+			"<th>Date</th>"+
+			"<th>Origin ID</th>"+
+			"<th>Destination ID</th>"+
+			"<th>Line Name</th>"+
+			"<th>Username</th>"+
+			"<th>Child?</th>"+
+			"<th>Senior?</th>"+
+			"<th>Disabled?</th>";
 					
 	
 	//Get Params
@@ -61,6 +75,7 @@ public class Constants {
 	public static final String HTTP_SESSION_QA_LIST = "question_list";
 	public static final String HTTP_SESSION_STATION_LIST = "station_list";
 	public static final String HTTP_SESSION_TRAIN_LINE_LIST = "trianline_list";
+	public static final String HTTP_SESSION_CUSTOMER_LIST = "customer_list";
 	
 
 
