@@ -753,6 +753,54 @@ public class ApplicationDB {
 	}
 	
 	
+	/**
+	 * getTopActiveLines
+	 * 
+	 * gets top 5 most active train lines
+	 * 
+	 * @return ArrayList<ArrayList<String>> row strings
+	 */
+	public ArrayList<ArrayList<String>> getTopActiveLines() {
+		ArrayList<ArrayList<String>> ret = new ArrayList<ArrayList<String>>();
+		//If we haven't established a connection, establish one
+		if(connection == null) connection = getConnection();
+		//If we failed to establish a connection, return false
+		if(connection == null) return ret;
+		System.out.println("[getTopActiveLines] Connected to Database");
+		Statement stmt;
+		try {
+			stmt = connection.createStatement();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return ret;
+		}
+		try {
+			//use the production database
+			stmt.execute("use TrainProject");
+			//run our query
+			String query = String.format("SELECT lineName, COUNT(*) as magnitude from %s group by lineName order by magnitude desc limit 5", Constants.RESERVATION_TABLE);
+			System.out.println("[getTopActiveLines] running : " + query);
+			
+			ResultSet res = stmt.executeQuery(query);
+			while(res.next()) {
+				ArrayList<String> t = new ArrayList<String>();
+				t.add(res.getString("lineName"));
+				t.add(res.getString("magnitude"));
+				ret.add(t);
+			}
+			System.out.println("[getTopActiveLines] Query successfully has data");
+			stmt.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		//closeConnection();
+		return ret;
+	}
+	
+	
+	
+	
 	
 	/**
 	 * TotalRevenueByCustomer
@@ -1041,7 +1089,8 @@ public class ApplicationDB {
 						res.getString("username"),
 						res.getBoolean("isChild"),
 						res.getBoolean("isSenior"),
-						res.getBoolean("isDisabled"));
+						res.getBoolean("isDisabled"),
+						res.getInt("schedID"));
 				ret.add(reservation);
 			}
 		} catch (SQLException e) {
@@ -1096,7 +1145,8 @@ public class ApplicationDB {
 						res.getString("username"),
 						res.getBoolean("isChild"),
 						res.getBoolean("isSenior"),
-						res.getBoolean("isDisabled"));
+						res.getBoolean("isDisabled"),
+						res.getInt("schedID"));
 				ret.add(reservation);
 			}
 		} catch (SQLException e) {

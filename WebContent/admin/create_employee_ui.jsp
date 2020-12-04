@@ -10,15 +10,7 @@
 
 <h2>Create New Representative</h2>
 
-<%
-if(request.getParameter("failed") != null) {
-%>
-<p style="color:red"> Failed to create Customer Representative. Please ensure all inputs are valid. </p>
-<%
-}
-%>
-
-<form method="post" action="create_account_logic.jsp?type=employee">
+<form method="post" action="./../create_account_logic.jsp?type=employee">
 	<p>SSN</p>
 	<input type="text" name="SSN" placeholder="12-345-6789"/>
 	<br/>

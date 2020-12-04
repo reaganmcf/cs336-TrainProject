@@ -30,7 +30,7 @@ if(customer_username != null) {
 %>
 
 <table>
-<%out.print(Constants.RESERVATION_TABLE_HEADERS); %>
+<%out.print(Constants.RESERVATION_TABLE_HEADERS);%>
 <%
 for(Reservation q : reservations) {
 	out.println(q.toTableString());

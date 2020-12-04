@@ -39,11 +39,11 @@ if(type == null) {
 	boolean res = ApplicationDB.getInstance().CreateEmployee(SSN, username, password, firstName, lastName);
 	if(res) {
 		System.out.println("[create_account_logic.jsp::employee] successfully created new employee - redirecting to employee login");
-		response.sendRedirect(Constants.EMPLOYEE_LOGIN_PAGE_REDIRECT_URL + "?just_created=true");
+		response.sendRedirect(Constants.ADMIN_INDEX_REDIRECT_URL + "?success_create_employee=true");
 	} else {
 		//redirect back to create screen
 		System.out.println("[create_account_logic.jsp::employee] failed to create - redirecting to create screen");
-		response.sendRedirect(Constants.EMPLOYEE_CREATE_PAGE_REDIRECT_URL + "?failed=true");
+		response.sendRedirect(Constants.ADMIN_INDEX_REDIRECT_URL + "?failed_create_employee=true");
 	}
 } else {
 	//redirect to dispatcher

@@ -38,9 +38,5 @@
 
 <br>
 
-<form method="post" action="create_employee_ui.jsp?type=employee">
-	<input type="submit" name="createAccount" value="Create Customer Representative">
-</form>
-
 </body>
 </html>

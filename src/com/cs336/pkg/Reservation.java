@@ -15,6 +15,7 @@ public class Reservation {
 	private boolean isChild;
 	private boolean isSenior;
 	private boolean isDisabled;
+	private int schedID;
 	
 	public Reservation(
 			int resNum,
@@ -27,7 +28,8 @@ public class Reservation {
 			String username, // references Customer
 			boolean isChild,
 			boolean isSenior,
-			boolean isDisabled) {
+			boolean isDisabled,
+			int schedID) {
 		this.resNum = resNum;
 		this.totalFare = totalFare;
 		this.passenger = passenger;
@@ -39,6 +41,7 @@ public class Reservation {
 		this.isChild = isChild;
 		this.isSenior = isSenior;
 		this.isDisabled = isDisabled;
+		this.schedID = schedID;
 	}
 	
 	public int getResNum() {
@@ -85,6 +88,10 @@ public class Reservation {
 		return isDisabled;
 	}
 	
+	public int getSchedID() {
+		return this.schedID;
+	}
+	
 	public String toTableString() {
 		return "<tr>"+
 				"<td>"+this.getResNum()+"</td>"+
@@ -98,6 +105,7 @@ public class Reservation {
 				"<td>"+(this.isChild() ? "YES" : "NO")+"</td>"+
 				"<td>"+(this.isSenior() ? "YES" : "NO")+"</td>"+
 				"<td>"+(this.isDisabled() ? "YES" : "NO")+"</td>"+
+				"<td>"+this.getSchedID()+"</td>"+
 				"</tr>";
 	}
 	

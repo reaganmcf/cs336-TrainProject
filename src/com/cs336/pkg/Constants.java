@@ -60,7 +60,8 @@ public class Constants {
 			"<th>Username</th>"+
 			"<th>Child?</th>"+
 			"<th>Senior?</th>"+
-			"<th>Disabled?</th>";
+			"<th>Disabled?</th>"+
+			"<th>Schedule ID</th>";
 	
 	public static final String TOTAL_REVENUE_BY_CUSTOMER_TABLE_HEADERS =
 			"<th>Total</th>"+

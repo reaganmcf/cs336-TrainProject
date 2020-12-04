@@ -20,6 +20,10 @@ if(request.getParameter("deleted_employee") != null) {
 	}
 } else if(request.getParameter("employee_editied") != null) {
 	%><p style="color:green">Successfully Edited Employee</p><%
+} else if(request.getParameter("failed_create_employee") != null) {
+	%><p style="color:red">Failed to create Representative. Please try again</p><%
+} else if(request.getParameter("success_create_employee") != null) {
+	%><p style="color:green">Successfully created Representative</p><%
 }
 %>
 
@@ -44,10 +48,16 @@ request.getSession().setAttribute(Constants.HTTP_SESSION_CUSTOMER_LIST, customer
 
 ArrayList<String> best_customer = ApplicationDB.getInstance().BestCustomer();
 
+ArrayList<ArrayList<String>> top_active_lines = ApplicationDB.getInstance().getTopActiveLines();
+
 out.print(admin.getUsername());
 %>
 
-
+<!--  ADD EMPLOYEE  -->
+<form method="post" action="create_employee_ui.jsp?type=employee">
+	<h4>Create New Customer Representative</h4>
+	<input type="submit" name="createAccount" value="Create Customer Representative">
+</form>
 
 <!--  EDIT EMPLOYEE  --> 
 <form method="post" action="edit_employee_ui.jsp">
@@ -136,6 +146,22 @@ out.print(admin.getUsername());
 <form method="post">
 	<h4>Best Customer</h4>
 	<%out.print(best_customer.get(0) + " : $" + best_customer.get(1)); %>
+</form>
+
+<!--   Top 5 Most Active Transit Lines   -->
+<form method="post">
+	<h3>Top 5 Most Active Transit Lines</h3>
+	<table>
+	<th>Line Name</th><th>Number of Reservations</th>
+	<%
+	for(ArrayList<String> row : top_active_lines) {
+		String t = "";
+		for(String s : row) {
+			t += "<td>" + s + "</td>";
+		}
+		out.print("<tr>" + t + "</tr>");
+	}%>
+	</table>
 </form>
 
 
