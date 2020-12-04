@@ -41,6 +41,9 @@ request.getSession().setAttribute(Constants.HTTP_SESSION_TRAIN_LINE_LIST, train_
 
 ArrayList<Customer> customer_list = ApplicationDB.getInstance().GetCustomers();
 request.getSession().setAttribute(Constants.HTTP_SESSION_CUSTOMER_LIST, customer_list);
+
+ArrayList<String> best_customer = ApplicationDB.getInstance().BestCustomer();
+
 out.print(admin.getUsername());
 %>
 
@@ -125,6 +128,14 @@ out.print(admin.getUsername());
 	<input type="text" name="month" maxlength=2 placeholder="12" required/>
 	<br/><br/>
 	<input type="submit" value="View Sales"/>
+</form>
+
+
+
+<!--   BEST CUSTOMER   -->
+<form method="post">
+	<h4>Best Customer</h4>
+	<%out.print(best_customer.get(0) + " : $" + best_customer.get(1)); %>
 </form>
 
 

@@ -707,6 +707,52 @@ public class ApplicationDB {
 	
 	
 	
+	/**
+	 * BestCustomer
+	 * 
+	 * Gets best customer
+	 * 
+	 * @return ArrayList<String> username and amount of money spent returned as a list
+	 */
+	public ArrayList<String> BestCustomer() {
+		ArrayList<String> ret = new ArrayList<String>();
+		//If we haven't established a connection, establish one
+		if(connection == null) connection = getConnection();
+		//If we failed to establish a connection, return false
+		if(connection == null) return ret;
+		System.out.println("[BestCustomer] Connected to Database");
+		Statement stmt;
+		try {
+			stmt = connection.createStatement();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return ret;
+		}
+		try {
+			//use the production database
+			stmt.execute("use TrainProject");
+			//run our query
+			String query = String.format("SELECT username, SUM(totalFare) as magnitude from %s group by username order by magnitude desc limit 1", Constants.RESERVATION_TABLE);
+			System.out.println("[BestCustomer] running : " + query);
+			
+			ResultSet res = stmt.executeQuery(query);
+			if(res.next()) {
+				System.out.println("[BestCustomer] Query successfully has data");
+				ret.add(res.getString("username"));
+				ret.add(res.getString("magnitude"));
+			} else {
+				System.out.println("[BestCustomer] Query failed to retrieve best customer");
+			}
+			stmt.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		//closeConnection();
+		return ret;
+	}
+	
+	
 	
 	/**
 	 * TotalRevenueByCustomer
