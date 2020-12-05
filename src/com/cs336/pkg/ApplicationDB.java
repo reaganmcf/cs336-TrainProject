@@ -276,7 +276,7 @@ public class ApplicationDB {
 //		closeConnection();	
 		return res;
 	}
-	
+
 	
 	
 	/**
@@ -359,7 +359,7 @@ public class ApplicationDB {
 			//use the production database
 			stmt.execute("use TrainProject");
 			//run our query
-			String query = String.format("");
+			String query = String.format("delete from Employee e where '%s' = e.SSN", SSN);
 			System.out.println("[DeleteEmployee] running : " + query);
 			res = stmt.executeUpdate(query) > 0;
 			System.out.println(res);
@@ -374,6 +374,53 @@ public class ApplicationDB {
 //		closeConnection();
 		return res;
 	}
+	
+	
+
+	/**
+	 * DeleteSchedule
+	 * 
+	 * Deletes a Schedule given the schedID
+	 * @param String schedID
+	 * 
+	 * @return boolean whether or not the action was successful
+	 */
+	public boolean DeleteSchedule(String schedID) {
+		//If we haven't established a connection, establish one
+		if(connection == null) connection = getConnection();
+		//If we failed to establish a connection, return false
+		if(connection == null) return false;
+		System.out.println("[DeleteSchedule] Connected to Database");
+		Statement stmt;
+		//Create a SQL statement
+		try {
+			stmt = connection.createStatement();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return false;
+		}
+		boolean res = false;
+		try {
+			//use the production database
+			stmt.execute("use TrainProject");
+			//run our query
+			String query = String.format("delete from Schedule where schedID = '%s'", schedID);
+			System.out.println("[DeleteSchedule] running : " + query);
+			res = stmt.executeUpdate(query) > 0;
+			System.out.println(res);
+			if(res) {
+				System.out.println("[DeleteSchedule] Query successfully has data");
+			} else {
+				System.out.println("[DeleteSchedule] Failed to delete Schedule");
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+//		closeConnection();
+		return res;
+	}
+	
 	
 	
 	
@@ -419,6 +466,107 @@ public class ApplicationDB {
 				System.out.println("[EditEmployee] Query successfully has data");
 			} else {
 				System.out.println("[EditEmployee] Failed to edit employee");
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+//		closeConnection();
+		return res;
+	}
+	
+	
+	
+	/**
+	 * EditSchedule
+	 * 
+	 * Edits a Schedule with new information
+	 * 
+	 * @return boolean whether or not the action was successful
+	 */
+	public boolean EditSchedule(String schedID, String date, String tID) {
+		//If we haven't established a connection, establish one
+		if(connection == null) connection = getConnection();
+		//If we failed to establish a connection, return false
+		if(connection == null) return false;
+		System.out.println("[EditSchedule] Connected to Database");
+		Statement stmt;
+		//Create a SQL statement
+		try {
+			stmt = connection.createStatement();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return false;
+		}
+		boolean res = false;
+		try {
+			//use the production database
+			stmt.execute("use TrainProject");
+			//run our query
+			
+			System.out.println(date);
+			java.sql.Date d = new java.sql.Date(new Date(date).getTime());
+			
+			String query = String.format("update %s set startTime = '%s', tID = '%s' where schedID = '%s'", Constants.SCHEDULE_TABLE, d, tID, schedID);
+			System.out.println("[EditSchedule] running : " + query);
+			res = stmt.executeUpdate(query) > 0;
+			if(res) {
+				System.out.println("[EditSchedule] Query successfully has data");
+			} else {
+				System.out.println("[EditSchedule] Failed to edit schedule");
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+//		closeConnection();
+		return res;
+	}
+	
+	
+	
+	/**
+	 * CreateSchedule
+	 * 
+	 * Creates a new Schedule
+	 * 
+	 * @return boolean whether or not the action was successful
+	 */
+	public boolean CreateSchedule(String trainLine, String date, String tID) {
+		//If we haven't established a connection, establish one
+		if(connection == null) connection = getConnection();
+		//If we failed to establish a connection, return false
+		if(connection == null) return false;
+		System.out.println("[CreateSchedule] Connected to Database");
+		Statement stmt;
+		//Create a SQL statement
+		try {
+			stmt = connection.createStatement();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return false;
+		}
+		boolean res = false;
+		try {
+			//use the production database
+			stmt.execute("use TrainProject");
+			//run our query
+			java.sql.Date d = new java.sql.Date(new Date(date).getTime());
+			stmt.execute(String.format("set @linName = '%s'", trainLine));
+			stmt.execute(String.format("set @startDateTime = '%s'", d));
+			stmt.execute(String.format("set @scheduleID = (select MAX(s.schedID)+1 from Schedule s)"));
+			stmt.execute(String.format("set @originID = (select t.originID from TrainLine t where t.lineName = @lineName)"));
+			stmt.execute(String.format("set @destinationID = (select t.destinationID from TrainLine t where t.lineName = @lineName)"));
+			stmt.execute(String.format("set @tID = '%s'", tID));
+			System.out.println("here");
+			String query = String.format("INSERT INTO Schedule VALUES (@scheduleID, @originID, @destinationID, @lineName, @startDateTime, @tID );");
+			
+			System.out.println("[CreateSchedule] running : " + query);
+			res = stmt.executeUpdate(query) > 0;
+			if(res) {
+				System.out.println("[CreateSchedule] Query successfully has data");
+			} else {
+				System.out.println("[CreateSchedule] Failed to Create schedule");
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -515,6 +663,53 @@ public class ApplicationDB {
 						res.getString("question"),
 						res.getString("answer"));
 				ret.add(qa);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+//		closeConnection();
+		return ret;
+	}
+	
+
+	
+	/**
+	 * GetTrains
+	 * 
+	 * gets all Train objects in the database and returns a list of Train objects
+	 * 
+	 * @return ArrayList<Train> list of Train objects
+	 */
+	public ArrayList<Train> GetTrains() {
+		ArrayList<Train> ret = new ArrayList<Train>();
+		//If we haven't established a connection, establish one
+		if(connection == null) connection = getConnection();
+		//If we failed to establish a connection, return false
+		if(connection == null) return ret;
+		System.out.println("[GetTrains] Connected to Database");
+		Statement stmt;
+		try {
+			stmt = connection.createStatement();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return ret;
+		}
+		try {
+			//use the production database
+			stmt.execute("use TrainProject");
+			//run our query
+			String query = String.format("SELECT * FROM %s", Constants.TRAIN_TABLE);
+			System.out.println("[GetQuestions] running : " + query);
+			
+			ResultSet res = stmt.executeQuery(query);
+			System.out.println("[GetQuestions] Query successfully has data");
+			while(res.next()) {
+				Train t = new Train(
+						res.getInt("tID"),
+						res.getInt("numSeats"),
+						res.getInt("numCars"));
+				ret.add(t);
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -1250,6 +1445,58 @@ public class ApplicationDB {
 //		closeConnection();
 		return ret;
 	}
+	
+	
+	
+	/**
+	 * GetSchedules
+	 * 
+	 * gets all the schedules in the database and returns a list of Schedule objects
+	 * 
+	 * @return ArrayList<Schedule> list of Schedule objects
+	 */
+	public ArrayList<Schedule> GetSchedules() {
+		ArrayList<Schedule> ret = new ArrayList<Schedule>();
+		//If we haven't established a connection, establish one
+		if(connection == null) connection = getConnection();
+		//If we failed to establish a connection, return false
+		if(connection == null) return ret;
+		System.out.println("[GetSchedules] Connected to Database");
+		Statement stmt;
+		try {
+			stmt = connection.createStatement();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return ret;
+		}
+		try {
+			//use the production database
+			stmt.execute("use TrainProject");
+			//run our query
+			String query = String.format("select * from %s", Constants.SCHEDULE_TABLE);
+			System.out.println("[GetSchedules] running : " + query);
+			
+			ResultSet res = stmt.executeQuery(query);
+			System.out.println("[GetSchedules] Query successfully has data");
+			while(res.next()) {
+				Schedule sched = new Schedule(
+						res.getInt("schedID"),
+						res.getInt("originID"),
+						res.getInt("destinationID"),
+						res.getString("lineName"),
+						res.getDate("startTime"),
+						res.getInt("tID"));
+				ret.add(sched);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+//		closeConnection();
+		return ret;
+	}
+	
+	
 	
 	/**
 	 * SearchSchedules

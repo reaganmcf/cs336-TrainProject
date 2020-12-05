@@ -12,14 +12,13 @@
 <body>
 
 <%
-ArrayList<Employee> employees = (ArrayList<Employee>) request.getSession().getAttribute(Constants.HTTP_SESSION_EMPLOYEE_LIST);
-if(employees == null) {
-	System.out.println("[edit_employee_ui.jsp] must not be an admin, redirect to login");
+String selected_ssn = request.getParameter("employee_ssn");
+if(selected_ssn == null) {
+	System.out.println("[edit_employee_ui.jsp] missing param, redirect to login");
 	response.sendRedirect(Constants.INDEX_PATH_REDIRECT_URL);
 }
 
-String selected_ssn = request.getParameter("employee_ssn");
-
+ArrayList<Employee> employees = (ArrayList<Employee>) request.getSession().getAttribute(Constants.HTTP_SESSION_EMPLOYEE_LIST);
 Employee curr_employee = null;
 for(Employee e : employees) {
 	if(e.getSSN().equals(selected_ssn)) {

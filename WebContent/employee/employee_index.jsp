@@ -24,6 +24,7 @@ out.print("Logged in as: " + employee.getUsername() + " " + employee.getLastName
 ArrayList<QA> questions = ApplicationDB.getInstance().GetQuestions();
 ArrayList<Station> stations = ApplicationDB.getInstance().GetStations();
 ArrayList<TrainLine> lines = ApplicationDB.getInstance().GetTrainLines();
+ArrayList<Schedule> schedules = ApplicationDB.getInstance().GetSchedules();
 %>
 
 <!--  ALERT MESSAGES FROM REDIRECTED PAGES  -->
@@ -32,8 +33,40 @@ if(request.getParameter("failed_answer") != null) {
 	%><p style="color:red">Failed to answer question. Please try again</p><%
 } else if(request.getParameter("success_answer") != null) {
 	%><p style="color:green">Successfully answered question</p><%
+} else if(request.getParameter("schedule_edited") != null) {
+	%><p style="color:green">Successfully Edited Schedule</p><%
+} else if(request.getParameter("schedule_deleted") != null) {
+	%><p style="color:green">Successfully Deleted Schedule</p><%
+} else if(request.getParameter("schedule_created") != null) {
+	%><p style="color:green">Successfully Created Schedule</p><%
 }
 %>
+
+
+
+<!-- CREATE NEW TRAIN SCHEDULE -->
+<form method="post" action="create_train_schedule_ui.jsp">
+	<h4>Create New Train Schedule</h4>
+	<br/>
+	<input type="submit" value="Create New Train Schedule"/>
+</form>
+
+
+<!--  EDIT OR DELETE TRAIN SCHEDULE -->
+<form method="post" action="edit_schedule_ui.jsp">
+	<h4>Edit or Delete Train Schedule</h4>
+	<select name="schedID" required>
+	<%
+    for(Schedule sched : schedules) {
+    %><option value="<% out.print(sched.getSchedID()); %>"><% out.print(sched.getSchedID() + " - " + sched.getLineName() + " (" + sched.getOriginID() + " TO " + sched.getDestinationID() + ")");%></option>
+    
+    <%}%>
+    </select><br/><br/>
+    <input type="submit" value="Edit Selected Train Schedule"/>
+</form>
+
+
+
 
 
 <!--  BROWSE ALL QUESTIONS  -->

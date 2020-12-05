@@ -12,19 +12,19 @@
 
 <form method="post" action="./../create_account_logic.jsp?type=employee">
 	<p>SSN</p>
-	<input type="text" name="SSN" placeholder="12-345-6789"/>
+	<input type="text" name="SSN" placeholder="12-345-6789" required/>
 	<br/>
 	<p>Username</p>
-	<input type="text" name="username" placeholder="super_duper_1234"/>
+	<input type="text" name="username" placeholder="super_duper_1234" required/>
 	<br/>
 	<p>Password</p>
-	<input type="text" name="password" placeholder="noonewillguessthis"/>
+	<input type="text" name="password" placeholder="noonewillguessthis" required/>
 	<br/>
 	<p>First Name</p>
-	<input type="text" name="firstName" placeholder="John"/>
+	<input type="text" name="firstName" placeholder="John" required/>
 	<br/>
 	<p>Last Name</p>
-	<input type="text" name="lastName" placeholder="Doe"/>
+	<input type="text" name="lastName" placeholder="Doe" required/>
 	<br/>
 	<br/>
 	<br/>

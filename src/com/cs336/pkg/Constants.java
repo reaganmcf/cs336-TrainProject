@@ -15,6 +15,8 @@ public class Constants {
 	public static final String STATION_TABLE = "Station";
 	public static final String TRAIN_LINE_TABLE = "TrainLine";
 	public static final String RESERVATION_TABLE = "Reservation";
+	public static final String SCHEDULE_TABLE = "Schedule";
+	public static final String TRAIN_TABLE = "Train";
 	
 	//Redirect Strings
 	public static final String PROJECT_PATH_NAME = "/cs336Sample";
