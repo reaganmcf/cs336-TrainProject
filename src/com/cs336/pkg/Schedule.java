@@ -7,7 +7,7 @@ public class Schedule {
 	private int originID;
 	private int destinationID;
 	private String lineName;
-	private Date startTime;
+	private String startTime;
 	private int tID;
 	
 	public Schedule(
@@ -15,13 +15,13 @@ public class Schedule {
 			int originID,
 			int destinationID,
 			String lineName,
-			Date startTime,
+			String startTime,
 			int tID) {
 		this.schedID = schedID;
 		this.originID = originID;
 		this.destinationID = destinationID;
 		this.lineName = lineName;
-		this.startTime = startTime;
+		this.startTime = startTime.substring(0, startTime.length() - 2);
 		this.tID = tID;
 	}
 	
@@ -41,7 +41,7 @@ public class Schedule {
 		return lineName;
 	}
 
-	public Date getStartTime() {
+	public String getStartTime() {
 		return startTime;
 	}
 	
@@ -55,7 +55,7 @@ public class Schedule {
 			"<td>"+this.getOriginID()+"</td>"+
 			"<td>"+this.getDestinationID()+"</td>"+
 			"<td>"+this.getLineName()+"</td>"+
-			"<td>"+this.getStartTime().toGMTString()+"</td>"+
+			"<td>"+this.getStartTime()+"</td>"+
 			"<td>"+this.getTID()+"</td>"+
 			"</tr>";
 	}

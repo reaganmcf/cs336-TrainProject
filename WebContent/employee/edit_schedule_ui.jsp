@@ -55,8 +55,8 @@ ArrayList<Train> trains = ApplicationDB.getInstance().GetTrains();
 	<p>Line Name (locked)</p>
 	<input type="text" name="lineName" value="<%out.print(curr_sched.getLineName());%>" readonly/>
 	<br/>
-	<p>Start Time (dd MMM YYYY hh:mm:ss GMT)</p>
-	<input type="text" name="startTime" value="<%out.print(curr_sched.getStartTime().toGMTString());%>"/>
+	<p>Start Time (yyyy-MM-dd HH:mm:ss)</p>
+	<input type="text" name="startTime" value="<%out.print(curr_sched.getStartTime());%>"/>
 	<p>Train ID (current = <% out.print(curr_sched.getTID());%>)</p>
 	
 	<select name="tID" required>
@@ -70,7 +70,7 @@ ArrayList<Train> trains = ApplicationDB.getInstance().GetTrains();
 	<input type="submit" value="Edit Schedule"/>
 </form>
 <br/><br/>
-<form method="post" action="delete_schedule_logic.jsp">
+<form method="post" action="delete_schedule_logic.jsp?schedID=<%out.print(curr_sched.getSchedID()); %>">
 	<input type="submit" value="Delete Schedule"/>
 </form>
 

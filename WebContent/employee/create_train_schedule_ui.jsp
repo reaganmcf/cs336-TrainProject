@@ -32,8 +32,8 @@ ArrayList<Train> trains = ApplicationDB.getInstance().GetTrains();
 			%><option value="<% out.print(line.getLineName());%>"><%out.print(line.getLineName());%></option>
 		<%}%>
 	</select>
-	<p>Date (dd MMM YYYY hh:mm:ss GMT)</p>
-	<input type="text" name="date" placeholder="21 Dec 2020 09:00:00 GMT" required/>
+	<p>Date (yyyy-MM-dd HH:mm:ss)</p>
+	<input type="text" name="date" placeholder="2020-12-22 16:20:00" required/>
 	<br/>
 	<p>Train</p>
 	<select name="tID" required>

@@ -505,9 +505,8 @@ public class ApplicationDB {
 			//run our query
 			
 			System.out.println(date);
-			java.sql.Date d = new java.sql.Date(new Date(date).getTime());
 			
-			String query = String.format("update %s set startTime = '%s', tID = '%s' where schedID = '%s'", Constants.SCHEDULE_TABLE, d, tID, schedID);
+			String query = String.format("update %s set startTime = '%s', tID = '%s' where schedID = '%s'", Constants.SCHEDULE_TABLE, date, tID, schedID);
 			System.out.println("[EditSchedule] running : " + query);
 			res = stmt.executeUpdate(query) > 0;
 			if(res) {
@@ -551,14 +550,12 @@ public class ApplicationDB {
 			//use the production database
 			stmt.execute("use TrainProject");
 			//run our query
-			java.sql.Date d = new java.sql.Date(new Date(date).getTime());
-			stmt.execute(String.format("set @linName = '%s'", trainLine));
-			stmt.execute(String.format("set @startDateTime = '%s'", d));
+			stmt.execute(String.format("set @lineName = '%s'", trainLine));
+			stmt.execute(String.format("set @startDateTime = '%s'", date));
 			stmt.execute(String.format("set @scheduleID = (select MAX(s.schedID)+1 from Schedule s)"));
 			stmt.execute(String.format("set @originID = (select t.originID from TrainLine t where t.lineName = @lineName)"));
 			stmt.execute(String.format("set @destinationID = (select t.destinationID from TrainLine t where t.lineName = @lineName)"));
-			stmt.execute(String.format("set @tID = '%s'", tID));
-			System.out.println("here");
+			stmt.execute(String.format("set @tID = %s", tID));
 			String query = String.format("INSERT INTO Schedule VALUES (@scheduleID, @originID, @destinationID, @lineName, @startDateTime, @tID );");
 			
 			System.out.println("[CreateSchedule] running : " + query);
@@ -1180,7 +1177,7 @@ public class ApplicationDB {
 						res.getInt("originID"),
 						res.getInt("destinationID"),
 						res.getString("lineName"),
-						res.getDate("startTime"),
+						res.getString("startTime"),
 						res.getInt("tID"));
 				ret.add(schedule);
 			}
@@ -1485,7 +1482,7 @@ public class ApplicationDB {
 						res.getInt("originID"),
 						res.getInt("destinationID"),
 						res.getString("lineName"),
-						res.getDate("startTime"),
+						res.getString("startTime"),
 						res.getInt("tID"));
 				ret.add(sched);
 			}
