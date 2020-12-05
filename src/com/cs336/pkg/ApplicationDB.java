@@ -1047,6 +1047,50 @@ public class ApplicationDB {
 	}
 	
 	
+	/**
+	 * SearchCustomersByTrainLineAndDate
+	 * 
+	 * gets usernames of all customers that meet the query and returns a list of them
+	 * 
+	 * @return ArrayList<String> usernames of all users
+	 */
+	public ArrayList<String> SearchCustomersByTrainLineAndDate(String lineName, java.sql.Date date) {
+		ArrayList<String> ret = new ArrayList<String>();
+		//If we haven't established a connection, establish one
+		if(connection == null) connection = getConnection();
+		//If we failed to establish a connection, return false
+		if(connection == null) return ret;
+		System.out.println("[SearchCustomersByTrainLineAndDate] Connected to Database");
+		Statement stmt;
+		try {
+			stmt = connection.createStatement();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return ret;
+		}
+		try {
+			//use the production database
+			stmt.execute("use TrainProject");
+			//run our query
+			stmt.execute(String.format("set @inputLine = '%s'", lineName));
+			stmt.execute(String.format("set @inputDate = CONCAT('%s', '%s')", date, "%"));
+			String query = String.format("SELECT r.username from %s r where r.lineName = @inputLine and r.date like @inputDate group by r.username", Constants.RESERVATION_TABLE);
+			System.out.println("[SearchCustomersByTrainLineAndDate] running : " + query);
+			
+			ResultSet res = stmt.executeQuery(query);
+			System.out.println("[SearchCustomersByTrainLineAndDate] Query successfully has data");
+			while(res.next()) {
+				ret.add(res.getString("username"));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+//		closeConnection();
+		return ret;
+	}
+	
+	
 	
 	/**
 	 * GetCustomers

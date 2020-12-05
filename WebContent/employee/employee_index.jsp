@@ -23,6 +23,7 @@ out.print("Logged in as: " + employee.getUsername() + " " + employee.getLastName
 
 ArrayList<QA> questions = ApplicationDB.getInstance().GetQuestions();
 ArrayList<Station> stations = ApplicationDB.getInstance().GetStations();
+ArrayList<TrainLine> lines = ApplicationDB.getInstance().GetTrainLines();
 %>
 
 <!--  ALERT MESSAGES FROM REDIRECTED PAGES  -->
@@ -76,6 +77,36 @@ if(request.getParameter("failed_answer") != null) {
     </select><br/><br/>
 	<input type="submit" value="View Schedules"/>
 </form>
+
+
+
+<!-- Customers by transit line and date -->
+<form method="post" action="employee_search_customer_reservations_logic.jsp">
+	<h4>Search for Customers who have Reservations on Train Line and Date</h4>
+	
+	<p>Train Line</p>
+	<select name="lineName" required>
+		 <%
+		for(TrainLine line: lines) {
+			%><option value="<% out.print(line.getLineName());%>"><%out.print(line.getLineName());%></option>
+		<%}%>
+	</select>
+	
+	<p>Date Year</p>
+	<input type="text" name="date_year" minlength=4 maxlength=4 required/>
+	
+	<p>Date Month (1-12)</p>
+	<input type="text" name="date_month" minlength=1 maxlength=2 required/>
+	
+	<p>Date Day (1-31)</p>
+	<input type="text" name="date_day" minlength=1 maxlength=2 required/>
+	
+	<br/>
+	<br/>
+	
+	<input type="submit" value="Search for Customers"/>
+</form>
+
 
 <form method="post" action="./../logout_logic.jsp">
 	<h6>Log Out</h6>

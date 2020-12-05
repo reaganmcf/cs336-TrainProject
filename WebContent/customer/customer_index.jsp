@@ -78,7 +78,7 @@ if(request.getParameter("failed_send") != null) {
 		 <%
 		for(Station s : stations) {
 			%><option value="<% out.print(s.getName());%>"><%out.print(s.getName());%></option>
-		<%}%>
+		<%}%> 
 	</select>
 	
 	<p>Date Year</p>
