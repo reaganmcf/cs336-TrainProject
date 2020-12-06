@@ -7,9 +7,10 @@
 <html>
 <head>
 <meta charset="ISO-8859-1">
+<jsp:include page="./../include.jsp" />
 <title>Edit Customer Representative</title>
 </head>
-<body>
+<body style="padding: 50px">
 
 <%
 String selected_ssn = request.getParameter("employee_ssn");
@@ -27,44 +28,50 @@ for(Employee e : employees) {
 	}
 }
 
-//curr_employee can't be null here because its a post param
-out.println(curr_employee);
-
 %>
 
 
 <!--  ALERT MESSAGES FROM REDIRECTED PAGS  -->
 <%
 if(request.getParameter("failed") != null) {		
-	%><p style="color:red">Failed to delete Representative. Please try again</p><%
+	%><div class="alert alert-danger">Failed to delete Representative. Please try again</div><%
 }
 %>
 
 
 <h1>Edit Customer Representative</h1>
-<form method="post" action="edit_employee_logic.jsp">
-	<p>SSN (locked)</p>
-	<input type="text" name="SSN" value="<%out.print(curr_employee.getSSN());%>" readonly/>
-	<br/>
-	<p>Username</p>
-	<input type="text" name="username" value="<%out.print(curr_employee.getUsername());%>"/>
-	<br/>
-	<p>Password</p>
-	<input type="text" name="password" value="<%out.print(curr_employee.getPassword());%>"/>
-	<br/>
-	<p>First Name</p>
-	<input type="text" name="firstName" value="<%out.print(curr_employee.getFirstName());%>"/>
-	<br/>
-	<p>Last Name</p>
-	<input type="text" name="lastName" value="<%out.print(curr_employee.getLastName());%>"/>
-	<br/>
-	<br/>
-	<br/>
-	<input type="submit" value="Edit Representative"/>
-</form> 
-<br/><br/>
+<div class="card" style="margin:20px; width: 30%">
+	<div class="card-header">New Representative</div>
+	<div style="padding: 10px">
+		<form method="post" action="edit_employee_logic.jsp">
+			<div class="form-group">
+				<label>SSN (locked)</label><br/>
+				<input class="form-control" type="text" name="SSN" value="<%out.print(curr_employee.getSSN());%>" readonly/>
+			</div>
+			<div class="form-group">
+				<label>Username</label><br/>
+				<input class="form-control" type="text" name="username" value="<%out.print(curr_employee.getUsername());%>"/>
+			</div>
+			<div class="form-group">
+				<label>Password</label><br/>
+				<input class="form-control" type="text" name="password" value="<%out.print(curr_employee.getPassword());%>"/>
+			</div>
+			<div class="form-group">
+				<label>First Name</label><br/>
+				<input class="form-control" type="text" name="firstName" value="<%out.print(curr_employee.getFirstName());%>"/>
+			</div>
+			<div class="form-group">
+				<label>Last Name</label><br/>
+				<input class="form-control" type="text" name="lastName" value="<%out.print(curr_employee.getLastName());%>"/>
+			</div>
+			<br/>
+			<input class="btn btn-primary" type="submit" value="Edit Representative"/>
+		</form>
+	</div>
+</div>
+<br/>
 <form method="post" action="delete_employee_logic.jsp?SSN=<%out.print(selected_ssn);%>">
-	<input type="submit" value="Delete Representative"/>
+	<input class="btn btn-danger" type="submit" value="Delete Representative"/>
 </form>
 
 </body>

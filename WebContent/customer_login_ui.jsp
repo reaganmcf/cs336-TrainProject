@@ -21,16 +21,23 @@
 
 </div>
 
-<form method="post" action="login_account_logic.jsp?type=customer">
-	<div class="form-group">
-		<input type="text" name="username" placeholder="username" required>
+<div class="card" style="margin: 20px; width: 30%">
+	<div class="card-header">Login</div>
+	<div style="padding: 10px">
+		<form method="post" action="login_account_logic.jsp?type=customer">
+			<div class="form-group">
+				<label>Username</label><br/>
+				<input class="form-control" type="text" name="username" placeholder="username" required>
+			</div>
+				
+			<div class="form-group">
+				<label>Password</label><br/>
+				<input class="form-control" type="text" name="password" placeholder="password" required>
+			</div>
+			<input type="submit" value="Login!" class="btn btn-primary">
+		</form>
 	</div>
-		
-	<div class="form-group">
-		<input type="text" name="password" placeholder="password" required>
-	</div>
-	<input type="submit" value="Login!" class="btn btn-primary">
-</form>
+</div>
 
 <br>
 

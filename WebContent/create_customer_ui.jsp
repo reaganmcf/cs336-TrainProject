@@ -17,31 +17,34 @@
 <%}%>
 </div>
 
-<form method="post" action="create_account_logic.jsp?type=customer">
-	<div class="form-group">
-		<label for="uname">Username</label><br/>
-		<input type="text" name="username" id="uname"  placeholder="super_duper_1234" required/>
+<div class="card" style="margin: 20px; width: 30%">
+	<div class="card-header">New Customer</div>
+	<div style="padding: 10px">
+		<form method="post" action="create_account_logic.jsp?type=customer">
+			<div class="form-group">
+				<label for="uname">Username</label><br/>
+				<input class="form-control" type="text" name="username" id="uname"  placeholder="super_duper_1234" required/>
+			</div>
+			<div class="form-group">
+				<label for="pass">Password</label><br/>
+				<input class="form-control" type="text" name="password" placeholder="noonewillguessthis" required/>
+			</div>
+			<div class="form-group">
+				<label for="email">Email</label><br/>
+				<input class="form-control"class="form-control"  id="email" type="text" name="email" placeholder="john.doe@gmail.com" required/>
+			</div>
+			<div class="form-group">
+				<label for="firstName">First Name</label><br/>
+				<input class="form-control" id="firstName" type="text" name="firstName" placeholder="John" required/>
+			</div>
+			<div class="form-group">
+				<label for="lastName">Last Name</label><br/>
+				<input class="form-control" id="lastName" type="text" name="lastName" placeholder="Doe" required/>
+			</div>
+			
+			<input class="btn btn-primary" type="submit" value="Create New Representative"/>
+		</form>
 	</div>
-	<div class="form-group">
-		<label for="pass">Password</label><br/>
-		<input type="text" name="password" placeholder="noonewillguessthis" required/>
-	</div>
-	<div class="form-group">
-		<label for="email">Email</label><br/>
-		<input id="email" type="text" name="email" placeholder="john.doe@gmail.com" required/>
-	</div>
-	<div class="form-group">
-		<label for="firstName">First Name</label><br/>
-		<input id="firstName" type="text" name="firstName" placeholder="John" required/>
-	</div>
-	<div class="form-group">
-		<label for="lastName">Last Name</label><br/>
-		<input id="lastName" type="text" name="lastName" placeholder="Doe" required/>
-	</div>
-	<br/>
-	<br/>
-	<input class="btn btn-primary" type="submit" value="Create New Representative"/>
-</form>
-
+</div>
 </body>
 </html>

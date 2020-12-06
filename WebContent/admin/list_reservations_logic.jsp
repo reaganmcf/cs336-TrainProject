@@ -5,10 +5,11 @@
 <!DOCTYPE html>
 <html>
 <head>
+<jsp:include page="./../include.jsp" />
 <meta charset="ISO-8859-1">
 <title>List of Reservations</title>
 </head>
-<body>
+<body style="padding: 50px">
 
 <%
 String customer_username = request.getParameter("customer_username");
@@ -29,7 +30,7 @@ if(customer_username != null) {
 
 %>
 
-<table>
+<table class="table table-bordered table-striped">
 <%out.print(Constants.RESERVATION_TABLE_HEADERS);%>
 <%
 for(Reservation q : reservations) {

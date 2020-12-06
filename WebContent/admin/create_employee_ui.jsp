@@ -3,33 +3,43 @@
 <!DOCTYPE html>
 <html>
 <head>
+<jsp:include page="./../include.jsp" />
 <meta charset="ISO-8859-1">
 <title>Create New Representative</title>
 </head>
-<body>
+<body style="padding: 50px">
 
 <h2>Create New Representative</h2>
 
-<form method="post" action="./../create_account_logic.jsp?type=employee">
-	<p>SSN</p>
-	<input type="text" name="SSN" placeholder="12-345-6789" required/>
-	<br/>
-	<p>Username</p>
-	<input type="text" name="username" placeholder="super_duper_1234" required/>
-	<br/>
-	<p>Password</p>
-	<input type="text" name="password" placeholder="noonewillguessthis" required/>
-	<br/>
-	<p>First Name</p>
-	<input type="text" name="firstName" placeholder="John" required/>
-	<br/>
-	<p>Last Name</p>
-	<input type="text" name="lastName" placeholder="Doe" required/>
-	<br/>
-	<br/>
-	<br/>
-	<input type="submit" value="Create New Representative"/>
-</form>
+<div class="card" style="margin:20px; width: 30%">
+	<div class="card-header">New Representative</div>
+	<div style="padding: 10px">
+		<form method="post" action="./../create_account_logic.jsp?type=employee">
+			<div class="form-group">
+				<label>SSN</label><br/>
+				<input class="form-control" type="text" name="SSN" placeholder="12-345-6789" required/>
+			</div>
+			<div class="form-group">
+				<label>Username</label><br/>
+				<input class="form-control" type="text" name="username" placeholder="super_duper_1234" required/>
+			</div>
+			<div class="form-group">
+				<label>Password</label><br/>
+				<input class="form-control"  type="text" name="password" placeholder="noonewillguessthis" required/>
+			</div>
+			<div class="form-group">
+				<label>First Name</label><br/>
+				<input class="form-control"  type="text" name="firstName" placeholder="John" required/>
+			</div>
+			<div class="form-group">
+				<label>Last Name</label><br/>
+				<input class="form-control"  type="text" name="lastName" placeholder="Doe" required/>
+			</div>
+			<br/>
+			<input class="btn btn-primary" type="submit" value="Create New Representative"/>
+		</form>
+	</div>
+</div>
 
 </body>
 </html>

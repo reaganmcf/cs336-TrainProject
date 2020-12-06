@@ -5,10 +5,11 @@
 <!DOCTYPE html>
 <html>
 <head>
+<jsp:include page="./../include.jsp" />
 <meta charset="ISO-8859-1">
 <title>List of Revenue</title>
 </head>
-<body>
+<body style="padding: 50px">
 <%
 String customer_username = request.getParameter("customer_username");
 String transit_line = request.getParameter("transit_line");
@@ -21,7 +22,7 @@ ArrayList<ArrayList<String>> revenues = new ArrayList<ArrayList<String>>();
 if(customer_username != null) {
 	//group by customer name
 	revenues = ApplicationDB.getInstance().TotalRevenueByCustomer();
-	out.print("<table>");
+	%><table class="table table-bordered table-striped"><%
 	out.print(Constants.TOTAL_REVENUE_BY_CUSTOMER_TABLE_HEADERS);
 	for(ArrayList<String> row : revenues) {
 		String t = "";
@@ -30,11 +31,11 @@ if(customer_username != null) {
 		}
 		out.println("<tr>" + t + "</tr>");
 	}
-	out.print("</table>");
+	%></table><%
 } else {
 	//group by transit line
 	revenues = ApplicationDB.getInstance().TotalRevenueByTransitLine();
-	out.print("<table>");
+	%><table class="table table-bordered table-striped"><%
 	out.print(Constants.TOTAL_REVENUE_BY_TRAINLINE_TABLE_HEADERS);
 	for(ArrayList<String> row : revenues) {
 		String t = "";

@@ -5,10 +5,11 @@
 <!DOCTYPE html>
 <html>
 <head>
+<jsp:include page="./../include.jsp" />
 <meta charset="ISO-8859-1">
 <title>Sales</title>
 </head>
-<body>
+<body style="padding: 50px">
 
 <%
 String year = request.getParameter("year");
@@ -19,8 +20,9 @@ if(year == null && month == null) {
 }
 
 float totalSales = ApplicationDB.getInstance().GetMonthlySales(year, month);
+
 %>
-<h4>Sales for <%out.print(year);%>-<%out.print(month);%> is <br/> <%out.print("<h1>" + totalSales + "</h1>");%></h4>
+<h4>Sales for <%out.print(year);%>-<%out.print(month);%> is <br/> <%out.print("<h1>$" + totalSales + "</h1>");%></h4>
 
 </body>
 </html>
