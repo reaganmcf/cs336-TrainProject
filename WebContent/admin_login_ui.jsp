@@ -3,34 +3,32 @@
 <!DOCTYPE html>
 <html>
 <head>
+<jsp:include page="include.jsp" />
 <meta charset="ISO-8859-1">
 <title>Admin Login</title>
 </head>
-<body>
+<body style="padding: 50px">
 
 <h2>Admin Login</h2>
 
+<div>
 <%
 if(request.getParameter("failed") != null) {
 %>
-<p style="color:red"> Failed Login. Please try again. </p>
+<div class="alert alert-danger"> Failed Login. Please try again. </div>
 <%
 }
 %>
+</div>
 <form method="post" action="login_account_logic.jsp?type=admin">
-	<table>
-		<tr>
-			<td>	
-				<input type="text" name="username" placeholder="username">
-			</td>
-		</tr>
-		<tr>
-			<td>
-				<input type="text" name="password" placeholder="password">
-			</td>
-		</tr>
-	</table>
-	<input type="submit" value="Login!">
+	<div class="form-group">
+		<input type="text" name="username" placeholder="username" required>	
+	</div>
+	<div class="form-group">
+		<input type="text" name="password" placeholder="password" required>
+	</div>
+	<input type="submit" value="Login!" class="btn btn-primary">
+
 </form>
 
 <br>

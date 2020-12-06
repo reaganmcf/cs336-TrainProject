@@ -6,10 +6,11 @@
 <!DOCTYPE html>
 <html>
 <head>
+<jsp:include page="./../include.jsp" />
 <meta charset="ISO-8859-1">
 <title>Customer Main Page</title>
 </head>
-<body>
+<body style="padding: 50px">
 
 <%
 Customer customer = (Customer) request.getSession().getAttribute(Constants.HTTP_SESSION_CUSTOMER);
@@ -19,8 +20,6 @@ if(customer == null) {
 	System.out.println("[customer_index.jsp] unauthorized access - redirecting to dispatch");
 	response.sendRedirect(Constants.INDEX_PATH_REDIRECT_URL);
 }
-
-out.print(customer.getEmail());
 
 
 //load some data
@@ -32,75 +31,110 @@ request.getSession().setAttribute(Constants.HTTP_SESSION_TRAIN_LINE_LIST, trainl
 %>
 
 <!--  ALERT MESSAGES FROM REDIRECTED PAGES  -->
+<div>
 <%
 if(request.getParameter("failed_send") != null) {
-	%><p style="color:red">Failed to send question. Please try again</p><%
+	%><div class="alert alert-danger">Failed to send question. Please try again</div><%
 } else if(request.getParameter("success_send") != null) {
-	%><p style="color:green">Successfully sent question</p><%
+	%><div class="alert alert-success">Successfully sent question</div><%
 }
 %>
+</div>
+
+<h1>Customer Menu Page</h1>
+<p>Welcome Back, <%out.print(customer.getFirstName() + customer.getLastName()); %></p>
+
 
 <!--  BROWSE ALL QUESTIONS  -->
-<form method="post" action="./../qa/browse.jsp">
-	<h6>Browse All Questions</h6>
-	<input type="submit" name="sub" value="Browse All Questions"/>
-</form>
+<div class="card" style="margin: 20px; width: 30%">
+	<div class="card-header"> Browse All Questions</div>
+	<div style="padding: 10px">
+		<form method="post" action="./../qa/browse.jsp">
+			<input class="btn btn-primary" type="submit" name="sub" value="Browse All Questions"/>
+		</form>
+	</div>
+</div>
 
 <!--  BROWSE ALL QUESTIONS BY KEYWORD  -->
-<form method="post" action="./../qa/browse.jsp">
-	<h6>Browse Questions by Keyword</h6>
-	<input type="text" name="keyword" required/>
-	<input type="submit" value="Browse All Questions"/>
-</form>
+<div class="card" style="margin: 20px; width: 30%">
+	<div class="card-header">Browse Questions by Keyword</div>
+	<div style="padding: 10px">
+		<form method="post" action="./../qa/browse.jsp">
+			<div class="form-group">
+				<label for="keyword">Keyword or Phrase to search</label><br/>
+				<input id="keyword" type="text" name="keyword" required/>
+			</div>
+			<input class="btn btn-primary" type="submit" value="Browse All Questions"/>
+		</form>
+	</div>
+</div>
 
 <!--  SEND QUESTION TO CUSTOMER SERVICE  -->
-<form method="post" action="./../qa/send_question_logic.jsp">
-	<h6>Submit a new question to Customer Service</h6>
-	<input type="text" name="question" required/>
-	<input type="submit" value="Submit New Question"/>	
-</form>
+<div class="card" style="margin: 20px; width: 30%">
+	<div class="card-header">Submit a new question to Customer Service</div>
+	<div style="padding: 10px">
+		<form id="sendQstnForm" method="post" action="./../qa/send_question_logic.jsp">
+			<div class="form-group">
+				<label for="question">New Question</label><br/>
+				<textarea name="question" required></textarea>
+			</div>
+			<input class="btn btn-primary" type="submit" value="Submit New Question"/>	
+		</form>
+	</div>
+</div>
 
 
 
 <!--  SEARCH TRAIN SCHEDULES  -->
-<form method="post" action="./search_schedules_logic.jsp">
-	<h4>Search for Schedules</h4>
-	<p>Origin</p>
-	<select name="origin" required>
-		<%
-		for(Station s : stations) {
-			%><option value="<% out.print(s.getName());%>"><%out.print(s.getName());%></option>
-		<%}%>
-	</select>
+<div class="card" style="margin: 20px; width: 30%">
+	<div class="card-header">Search for Schedules</div>
+	<div style="padding: 10px">
+		<form method="post" action="./search_schedules_logic.jsp">
+			<div class="form-group">
+				<label for="origin">Origin</label><br/>
+				<select id="origin" name="origin" required>
+					<%
+					for(Station s : stations) {
+						%><option value="<% out.print(s.getName());%>"><%out.print(s.getName());%></option>
+					<%}%>
+				</select>
+			</div>
+			<div class="form-group">
+				<label for="destination">Destination</label><br/>
+				<select id="destination" name="destination" required>
+					 <%
+					for(Station s : stations) {
+						%><option value="<% out.print(s.getName());%>"><%out.print(s.getName());%></option>
+					<%}%> 
+				</select>
+			</div>
 	
-	<p>Destination</p>
-	<select name="destination" required>
-		 <%
-		for(Station s : stations) {
-			%><option value="<% out.print(s.getName());%>"><%out.print(s.getName());%></option>
-		<%}%> 
-	</select>
-	
-	<p>Date Year</p>
-	<input type="text" name="date_year" minlength=4 maxlength=4 required/>
-	
-	<p>Date Month (1-12)</p>
-	<input type="text" name="date_month" minlength=1 maxlength=2 required/>
-	
-	<p>Date Day (1-31)</p>
-	<input type="text" name="date_day" minlength=1 maxlength=2 required/>
-	
-	<br/>
-	<br/>
-	
-	<input type="submit" value="Search for Schedules"/>
-</form>
+			<div class="form-group">
+				<label>Date Year</label><br/>
+				<input type="text" name="date_year" minlength=4 maxlength=4 required/>
+			</div>
+			
+			<div class="form-group">
+				<label>Date Month (1-12)</label><br/>
+				<input type="text" name="date_month" minlength=1 maxlength=2 required/>
+			</div>
+			
+			<div class="form-group">
+				<label>Date Day (1-31)</label><br/>
+				<input type="text" name="date_day" minlength=1 maxlength=2 required/>
+			</div>
+			
+			
+			<input class="btn btn-primary" type="submit" value="Search for Schedules"/>
+		</form>
+	</div>
+</div>
 
-
-
+<br/><br/>
 <form method="post" action="./../logout_logic.jsp">
-	<h6>Logout</h6>
-	<input type="submit" name="logout" value="Log Out">
+	<div class="form-group">
+		<input class="btn btn-danger" type="submit" name="logout" value="Log Out">
+	</div>
 </form>
 
 </body>
