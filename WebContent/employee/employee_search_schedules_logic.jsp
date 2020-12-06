@@ -5,10 +5,11 @@
 <!DOCTYPE html>
 <html>
 <head>
+<jsp:include page="./../include.jsp" />
 <meta charset="ISO-8859-1">
 <title>Schedule List</title>
 </head>
-<body>
+<body style="padding: 50px">
 
 <%
 String stationName = request.getParameter("station_name");
@@ -18,7 +19,7 @@ if(stationName == null) {//redirect to dispatcher
 }
 
 %>
-<table>
+<table class="table table-striped table-bordered">
 <%
 ArrayList<Schedule> schedules = ApplicationDB.getInstance().GetSchedulesOnStationName(stationName);
 out.print(Constants.SCHEDULE_TABLE_HEADERS);

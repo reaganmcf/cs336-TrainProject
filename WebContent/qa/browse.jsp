@@ -5,10 +5,11 @@
 <!DOCTYPE html>
 <html>
 <head>
+<jsp:include page="./../include.jsp" />
 <meta charset="ISO-8859-1">
 <title>Browse Questions and Answers</title>
 </head>
-<body>
+<body style="padding: 50px">
 
 <%
 //Now that we are authenticated, start pulling data we need
@@ -23,7 +24,7 @@ if(keyword == null) {
 request.getSession().setAttribute(Constants.HTTP_SESSION_QA_LIST, questions);
 %>
 
-<table>
+<table class="table table-striped table-bordered">
 <%out.print(Constants.QUESTIONS_ANSWER_TABLE_HEADERS); %>
 <%
 for(QA q : questions) {

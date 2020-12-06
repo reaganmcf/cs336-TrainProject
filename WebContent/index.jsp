@@ -16,11 +16,13 @@
 	</div>
 </form>
 <br/>
-<form type="post" action="customer_login_ui.jsp">
-	<div style="margin-top: 50px">
-		<input value="Customer" type="submit" class="btn btn-primary"/>
-	</div>
-</form>
+<div>
+	<form type="post" action="customer_login_ui.jsp">
+		<div style="margin-top: 50px">
+			<input value="Customer" type="submit" class="btn btn-primary"/>
+		</div>
+	</form>
+</div>
 <br/>
 <form type="post" action="employee_login_ui.jsp">
 	<div style="margin-top: 50px">

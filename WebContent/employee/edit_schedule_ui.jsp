@@ -5,10 +5,11 @@
 <!DOCTYPE html>
 <html>
 <head>
+<jsp:include page="./../include.jsp" />
 <meta charset="ISO-8859-1">
 <title>Edit Schedule</title>
 </head>
-<body>
+<body style="padding: 50px">
 
 <%
 if(request.getParameter("failed") != null) {
@@ -41,37 +42,44 @@ ArrayList<Train> trains = ApplicationDB.getInstance().GetTrains();
 //curr_sched can't be null here since its a param from the list
 %>
 
-<h1>Edit Schedule</h1>
-<form method="post" action="edit_schedule_logic.jsp">
-	<p>Schedule ID (locked)</p>
-	<input type="text" name="schedID" value="<%out.print(curr_sched.getSchedID());%>" readonly/>
-	<br/>
-	<p>Origin ID (locked)</p>
-	<input type="text" name="originID" value="<%out.print(curr_sched.getOriginID());%>" readonly/>
-	<br/>
-	<p>Destination ID (locked)</p>
-	<input type="text" name="destinationID" value="<%out.print(curr_sched.getDestinationID());%>" readonly/>
-	<br/>
-	<p>Line Name (locked)</p>
-	<input type="text" name="lineName" value="<%out.print(curr_sched.getLineName());%>" readonly/>
-	<br/>
-	<p>Start Time (yyyy-MM-dd HH:mm:ss)</p>
-	<input type="text" name="startTime" value="<%out.print(curr_sched.getStartTime());%>"/>
-	<p>Train ID (current = <% out.print(curr_sched.getTID());%>)</p>
-	
-	<select name="tID" required>
-	<%
-    for(Train t: trains) {
-    %><option value="<% out.print(t.gettId()); %>"><% out.print(t.gettId() + " - Seats=" + t.getNumSeats() + " , Cars=" + t.getNumCars());%></option>
-    
-    <%}%>
-    </select><br/><br/>
-	<br/>
-	<input type="submit" value="Edit Schedule"/>
-</form>
-<br/><br/>
+<h2>Edit Schedule</h2>
+<div class="card" style="margin: 20px; width: 30%">
+	<div class="card-header">Schedule Details</div>
+	<div style="padding: 10px">
+		<form method="post" action="edit_schedule_logic.jsp">
+			<label>Schedule ID (locked)</label>
+			<input class="form-control" type="text" name="schedID" value="<%out.print(curr_sched.getSchedID());%>" readonly/>
+			<br/>
+			<label>Origin ID (locked)</label>
+			<input class="form-control" type="text" name="originID" value="<%out.print(curr_sched.getOriginID());%>" readonly/>
+			<br/>
+			<label>Destination ID (locked)</label>
+			<input class="form-control" type="text" name="destinationID" value="<%out.print(curr_sched.getDestinationID());%>" readonly/>
+			<br/>
+			<label>Line Name (locked)</label>
+			<input class="form-control" type="text" name="lineName" value="<%out.print(curr_sched.getLineName());%>" readonly/>
+			<br/>
+			<div class="form-group">
+				<label>Start Time (yyyy-MM-dd HH:mm:ss)</label>
+				<input class="form-control" type="text" name="startTime" value="<%out.print(curr_sched.getStartTime());%>"/>
+			</div>
+			<div class="form-group">
+				<label>Train ID (current = <% out.print(curr_sched.getTID());%>)</label>
+				<select class="form-control" name="tID" required>
+				<%
+			    for(Train t: trains) {
+			    %><option value="<% out.print(t.gettId()); %>"><% out.print(t.gettId() + " - Seats=" + t.getNumSeats() + " , Cars=" + t.getNumCars());%></option>
+			    
+			    <%}%>
+			    </select>
+			</div>	
+			<br/>
+			<input class="btn btn-primary" type="submit" value="Edit Schedule"/>
+		</form>
+	</div>
+</div>
 <form method="post" action="delete_schedule_logic.jsp?schedID=<%out.print(curr_sched.getSchedID()); %>">
-	<input type="submit" value="Delete Schedule"/>
+	<input class="btn btn-danger" type="submit" value="Delete Schedule"/>
 </form>
 
 </body>

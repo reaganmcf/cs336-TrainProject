@@ -6,10 +6,11 @@
 <!DOCTYPE html>
 <html>
 <head>
+<jsp:include page="./../include.jsp" />
 <meta charset="ISO-8859-1">
 <title>Customers by Transit Line and Date</title>
 </head>
-<body>
+<body style="padding: 50px">
 
 <%
 String lineName = request.getParameter("lineName");
@@ -23,7 +24,7 @@ if(lineName == null || date_year == null || date_month == null || date_day == nu
 
 Date d = new Date(Integer.parseInt(date_year) - 1900, Integer.parseInt(date_month)-1, Integer.parseInt(date_day));
 %>
-<table style="border: 1px solid black">
+<table class="table table-striped table-bordered">
 <%
 ArrayList<String> ret = ApplicationDB.getInstance().SearchCustomersByTrainLineAndDate(lineName, d);
 
