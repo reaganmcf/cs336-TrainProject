@@ -58,7 +58,7 @@ if(fare == null || originID == null || destinationID == null || lineName == null
 			</div>
 			<div class="form-group">
 				<label>Baseline Fare <i>(Will change once finalized)</i></label>
-				<input type="text" class="form-control" readonly value="<%out.print(fare);%>"/>
+				<input name="fare" type="text" class="form-control" readonly value="<%out.print(fare);%>"/>
 				<div class="card" style="margin: 20px">
 					<div class="card-header">Fare Breakdown</div>
 					<div style="padding: 10px">
@@ -89,19 +89,19 @@ if(fare == null || originID == null || destinationID == null || lineName == null
 					<div class="col">
 						<div class="form-group">
 							<label>Disabled?</label>
-							<input type="checkbox" name="isDisabled"/>
+							<input type="checkbox" value=0 name="isDisabled"/>
 						</div>
 					</div>
 					<div class="col">
 						<div class="form-group">
 							<label>Child?</label>
-							<input type="checkbox" name="isChild"/>
+							<input type="checkbox" value=0 name="isChild"/>
 						</div>
 					</div>
 					<div class="col">
 						<div class="form-group">
 							<label>Senior?</label>
-							<input type="checkbox" name="isSenior"/>
+							<input type="checkbox" value=0 name="isSenior"/>
 						</div>
 					</div>
 					<div class="col">

@@ -911,7 +911,7 @@ public class ApplicationDB {
 	 * 
 	 * @return boolean status of the operation
 	 */
-	public boolean MakeReservation(float fare, int isRoundTrip, int isDisabled, int isSenior, int isChild, String passengerName, String startDate, int originID, int destinationID, String lineName, String username) {
+	public boolean MakeReservation(float fare, int isRoundTrip, int isDisabled, int isSenior, int isChild, String passengerName, String startDate, int originID, int destinationID, String lineName, String username, int schedID) {
 		//If we haven't established a connection, establish one
 		if(connection == null) connection = getConnection();
 		//If we failed to establish a connection, return false
@@ -930,9 +930,15 @@ public class ApplicationDB {
 			//use the production database
 			stmt.execute("use TrainProject");
 			//run our query
-			String query = String.format("UPDATE %s SET answer = '%s' WHERE question = '%s';", Constants.QA_TABLE, answer, question);
+			stmt.execute("set @resID = (select MAX(resNum) + 1 from Reservation)");
+			stmt.execute(String.format("set @Fare = '%f'", fare));
+			stmt.execute(String.format("set @Fare = (IF(%s , 2 * @Fare, @Fare))", isRoundTrip));
+			String query = String.format("set @Fare = (IF(%s , 0.5 * @Fare, IF(%s , .65*@Fare, IF(%s , .75*@Fare, @Fare))))", isDisabled, isSenior, isChild);
+			System.out.println(query);
+			stmt.execute(query);
+			query = String.format("INSERT INTO Reservation VALUES (@resID, @Fare,'%s', '%s', %s, %s, '%s', '%s',%s, %s, %s, %s);",
+						passengerName, startDate, originID, destinationID, lineName, username, isChild, isSenior, isDisabled, schedID);
 			System.out.println("[MakeReservation] running : " + query);
-			
 			res = stmt.executeUpdate(query) > 0;
 			if(res) {
 				System.out.println("[MakeReservation] Query successfully has data");

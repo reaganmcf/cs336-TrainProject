@@ -49,7 +49,7 @@ public class Employee {
 				this.getFirstName() + " " +
 				this.getLastName() + " " +
 				"</p>";
-	}
+	} 
 
 }
 
