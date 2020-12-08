@@ -1,14 +1,6 @@
 <%@page import="com.cs336.pkg.*"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="ISO-8859-1">
-<title>Logging In User...</title>
-</head>
-<body>
-
 <%
 String type = request.getParameter(Constants.LOGIN_ACCOUNT_PARAMETER);
 if(type == null) {
@@ -75,6 +67,13 @@ if(type == null) {
 	response.sendRedirect(Constants.INDEX_PATH_REDIRECT_URL);
 }
 %>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Logging In User...</title>
+</head>
+<body>
 
 </body>
 </html>

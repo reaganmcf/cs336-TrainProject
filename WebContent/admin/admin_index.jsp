@@ -2,6 +2,15 @@
 <%@page import="java.util.*" %>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
+ <%
+Admin admin = (Admin) request.getSession().getAttribute(Constants.HTTP_SESSION_ADMIN);
+if(admin == null) {
+	//shouldn't be here. Redirect
+	System.out.println("[admin_index.jsp] unauthorized access - redirecting to dispatch");
+	response.sendRedirect(Constants.INDEX_PATH_REDIRECT_URL);
+	return;
+}
+%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -28,15 +37,8 @@ if(request.getParameter("deleted_employee") != null) {
 }
 %>
 
+
 <%
-Admin admin = (Admin) request.getSession().getAttribute(Constants.HTTP_SESSION_ADMIN);
-
-if(admin == null) {
-	//shouldn't be here. Redirect
-	System.out.println("[admin_index.jsp] unauthorized access - redirecting to dispatch");
-	response.sendRedirect(Constants.INDEX_PATH_REDIRECT_URL);
-}
-
 //Now that we are authenticated, start pulling data we need
 ArrayList<Employee> employees = ApplicationDB.getInstance().getEmployees();
 request.getSession().setAttribute(Constants.HTTP_SESSION_EMPLOYEE_LIST, employees);

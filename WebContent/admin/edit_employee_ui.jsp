@@ -3,6 +3,13 @@
 <%@page import="com.cs336.pkg.*"%>
 <%@page import="java.util.*" %>
 <%@ page isELIgnored="false" %>
+<%
+String selected_ssn = request.getParameter("employee_ssn");
+if(selected_ssn == null) {
+	System.out.println("[edit_employee_ui.jsp] missing param, redirect to login");
+	response.sendRedirect(Constants.INDEX_PATH_REDIRECT_URL);
+}
+%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -13,12 +20,6 @@
 <body style="padding: 50px">
 
 <%
-String selected_ssn = request.getParameter("employee_ssn");
-if(selected_ssn == null) {
-	System.out.println("[edit_employee_ui.jsp] missing param, redirect to login");
-	response.sendRedirect(Constants.INDEX_PATH_REDIRECT_URL);
-}
-
 ArrayList<Employee> employees = (ArrayList<Employee>) request.getSession().getAttribute(Constants.HTTP_SESSION_EMPLOYEE_LIST);
 Employee curr_employee = null;
 for(Employee e : employees) {

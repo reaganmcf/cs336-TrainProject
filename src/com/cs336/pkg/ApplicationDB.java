@@ -575,6 +575,56 @@ public class ApplicationDB {
 	
 	
 	/**
+	 * GetStopsOnSchedule
+	 * 
+	 * gets the names of all stops on a schedule and returns a list of them
+	 * 
+	 * @param originStationName name of the origin station
+	 * @param destinationStationName name of the destination station
+	 * 
+	 * @return ArrayList<String> list of all the names of stops
+	 */
+	public ArrayList<String> GetStopsOnSchedule(String originStationName, String destinationStationName) {
+		//If we haven't established a connection, establish one
+		ArrayList<String> ret = new ArrayList<String>();
+		if(connection == null) connection = getConnection();
+		//If we failed to establish a connection, return false
+		if(connection == null) return ret;
+		System.out.println("[GetStopsOnSchedule] Connected to Database");
+		Statement stmt;
+		try {
+			stmt = connection.createStatement();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return ret;
+		}
+		try {
+			//use the production database
+			stmt.execute("use TrainProject");
+			//run our query
+			stmt.execute(String.format("set @originID = (select s.stationID from Station s where s.name = '%s')", originStationName));
+			stmt.execute(String.format("set @destinationID = (select s.stationID from Station s where s.name = '%s')", destinationStationName));
+		
+			String query = String.format("select s.name as Stops from Station s where ((@originID < s.stationID AND @destinationID > s.stationID) OR (@originID  > s.stationID AND @destinationID < s.stationID))");
+			System.out.println("[GetStopsOnSchedule] running : " + query);
+			
+			ResultSet res = stmt.executeQuery(query);
+			System.out.println("[GetStopsOnSchedule] Query successfully has data");
+			while(res.next()) {
+				ret.add(res.getString("Stops"));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		// closeConnection();
+		return ret;
+	}
+	
+	
+	
+	
+	/**
 	 * getEmployees
 	 * 
 	 * gets all info about employees and returns a list of Employee objects
@@ -843,6 +893,51 @@ public class ApplicationDB {
 				System.out.println("[AnswerQuestion] Query successfully has data");
 			} else {
 				System.out.println("[AnswerQuestion] Query failed to update question with new answer in the table");
+			}
+			stmt.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		//closeConnection();
+		return res;
+	}
+	
+	
+	
+	/**
+	 * MakeReservation
+	 * 
+	 * Makes reservation for a customer
+	 * 
+	 * @return boolean status of the operation
+	 */
+	public boolean MakeReservation(float fare, int isRoundTrip, int isDisabled, int isSenior, int isChild, String passengerName, String startDate, int originID, int destinationID, String lineName, String username) {
+		//If we haven't established a connection, establish one
+		if(connection == null) connection = getConnection();
+		//If we failed to establish a connection, return false
+		if(connection == null) return false;
+		System.out.println("[MakeReservation] Connected to Database");
+		Statement stmt;
+		try {
+			stmt = connection.createStatement();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return false;
+		}
+		boolean res = false;
+		try {
+			//use the production database
+			stmt.execute("use TrainProject");
+			//run our query
+			String query = String.format("UPDATE %s SET answer = '%s' WHERE question = '%s';", Constants.QA_TABLE, answer, question);
+			System.out.println("[MakeReservation] running : " + query);
+			
+			res = stmt.executeUpdate(query) > 0;
+			if(res) {
+				System.out.println("[MakeReservation] Query successfully has data");
+			} else {
+				System.out.println("[MakeReservation] Query failed to make a reservation");
 			}
 			stmt.close();
 		} catch (SQLException e) {
@@ -1540,7 +1635,7 @@ public class ApplicationDB {
 			stmt.execute("set @addOriginTime  = @timePerStop * @differenceOrigin;");
 			stmt.execute("set @addDestinationTime = @timePerStop * @differenceDest;");
 			stmt.execute("set @fare = @farePerStop * @numStops;");
-			res = stmt.executeQuery("select s.schedID, s.tID, DATE_ADD(s.startTime, INTERVAL @addOriginTime MINUTE) as start, DATE_ADD(s.startTime, INTERVAL @addDestinationTime MINUTE) as end, @fare as fare from Schedule s where s.lineName = @line AND s.startTime LIKE @selectedDate;");
+			res = stmt.executeQuery("select s.schedID, s.originID, s.lineName, s.destinationID, s.tID, DATE_ADD(s.startTime, INTERVAL @addOriginTime MINUTE) as start, DATE_ADD(s.startTime, INTERVAL @addDestinationTime MINUTE) as end, @fare as fare from Schedule s where s.lineName = @line AND s.startTime LIKE @selectedDate;");
 			//run our query
 			ret = new ArrayList<SpecialSchedule>();
 		
@@ -1549,9 +1644,12 @@ public class ApplicationDB {
 				//if there is data in here, create a new CustomerMakes Object and attach it to HttpSession
 				SpecialSchedule spedspec = new SpecialSchedule(
 						res.getInt("schedID"),
+						res.getInt("originID"),
+						res.getInt("destinationID"),
 						res.getInt("tID"),
 						res.getString("start"),
 						res.getString("end"),
+						res.getString("lineName"),
 						res.getFloat("fare"));
 				ret.add(spedspec);
 			}

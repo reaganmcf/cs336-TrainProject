@@ -2,11 +2,6 @@
     pageEncoding="ISO-8859-1"%>
 <%@page import="com.cs336.pkg.*"%>
 <%@page import="java.util.*" %>
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="ISO-8859-1">
-<title>Editing Schedule...</title>
 
 <%
 String schedID = request.getParameter("schedID");
@@ -31,6 +26,11 @@ if(schedID == null || originID == null || destinationID == null || lineName == n
 	}
 }
 %>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Editing Schedule...</title>
 </head>
 <body>
 

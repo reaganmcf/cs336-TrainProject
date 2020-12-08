@@ -2,6 +2,16 @@
     pageEncoding="ISO-8859-1"%>
 <%@page import="com.cs336.pkg.*"%>
 <%@page import="java.util.*" %>
+<%
+
+String selected_schedID = request.getParameter("schedID");
+if(selected_schedID == null) {
+	System.out.println("[edit_schedule_ui.jsp] missing param, redirect to login");
+	response.sendRedirect(Constants.INDEX_PATH_REDIRECT_URL);
+	return;
+}
+%>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -10,21 +20,13 @@
 <title>Edit Schedule</title>
 </head>
 <body style="padding: 50px">
-
 <%
+
 if(request.getParameter("failed") != null) {
 	%><p style="color:red">Failed to Edit Schedule. Please try again</p><%
 } else if(request.getParameter("failed_delete") != null) {
 	%><p style="color:red">Failed to Delete Schedule. Please try again</p><%
 }
-%>
-<%
-String selected_schedID = request.getParameter("schedID");
-if(selected_schedID == null) {
-	System.out.println("[edit_schedule_ui.jsp] missing param, redirect to login");
-	response.sendRedirect(Constants.INDEX_PATH_REDIRECT_URL);
-}
-
 int target_schedID = Integer.parseInt(selected_schedID);
 
 ArrayList<Schedule> schedules = ApplicationDB.getInstance().GetSchedules();

@@ -3,14 +3,6 @@
 <%@page import="com.cs336.pkg.*"%>
 <%@page import="java.util.*" %>
 <%@page import="java.sql.Date" %>
-<!DOCTYPE html>
-<html>
-<head>
-<jsp:include page="./../include.jsp" />
-<meta charset="ISO-8859-1">
-<title>Customers by Transit Line and Date</title>
-</head>
-<body style="padding: 50px">
 
 <%
 String lineName = request.getParameter("lineName");
@@ -21,6 +13,16 @@ if(lineName == null || date_year == null || date_month == null || date_day == nu
 	System.out.println("[employee_search_schedules_logic.jsp] no param - redirecting to dispatch");
 	response.sendRedirect(Constants.INDEX_PATH_REDIRECT_URL);
 }
+%>
+<!DOCTYPE html>
+<html>
+<head>
+<jsp:include page="./../include.jsp" />
+<meta charset="ISO-8859-1">
+<title>Customers by Transit Line and Date</title>
+</head>
+<body style="padding: 50px">
+<%
 
 Date d = new Date(Integer.parseInt(date_year) - 1900, Integer.parseInt(date_month)-1, Integer.parseInt(date_day));
 %>

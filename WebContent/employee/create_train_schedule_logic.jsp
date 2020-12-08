@@ -2,14 +2,6 @@
     pageEncoding="ISO-8859-1"%>
 <%@page import="com.cs336.pkg.*"%>
 <%@page import="java.util.*" %>
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="ISO-8859-1">
-<title>Creating Schedule...</title>
-</head>
-<body>
-
 <%
 String trainLine = request.getParameter("trainLine");
 String date = request.getParameter("date");
@@ -18,6 +10,7 @@ String tID = request.getParameter("tID");
 if(trainLine == null || date == null || tID == null) {
 	System.out.println("[create_train_schedule_logic.jsp] missing param, redirect to login");
 	response.sendRedirect(Constants.INDEX_PATH_REDIRECT_URL);
+	return;
 } else {
 	boolean res = ApplicationDB.getInstance().CreateSchedule(trainLine, date, tID);
 	if(res) {
@@ -30,6 +23,14 @@ if(trainLine == null || date == null || tID == null) {
 	}
 }
 %>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Creating Schedule...</title>
+</head>
+<body>
+
 
 </body>
 </html>

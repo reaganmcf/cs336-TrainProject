@@ -2,6 +2,14 @@
     pageEncoding="ISO-8859-1"%>
 <%@page import="com.cs336.pkg.*"%>
 <%@page import="java.util.*" %>
+<%
+String customer_username = request.getParameter("customer_username");
+String transit_line = request.getParameter("transit_line");
+if(customer_username == null && transit_line == null) {
+	System.out.println("[list_revenue_logic.jsp] must not be an admin, redirect to login");
+	response.sendRedirect(Constants.INDEX_PATH_REDIRECT_URL);
+}
+%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -10,14 +18,8 @@
 <title>List of Revenue</title>
 </head>
 <body style="padding: 50px">
-<%
-String customer_username = request.getParameter("customer_username");
-String transit_line = request.getParameter("transit_line");
-if(customer_username == null && transit_line == null) {
-	System.out.println("[list_revenue_logic.jsp] must not be an admin, redirect to login");
-	response.sendRedirect(Constants.INDEX_PATH_REDIRECT_URL);
-}
 
+<%
 ArrayList<ArrayList<String>> revenues = new ArrayList<ArrayList<String>>();
 if(customer_username != null) {
 	//group by customer name

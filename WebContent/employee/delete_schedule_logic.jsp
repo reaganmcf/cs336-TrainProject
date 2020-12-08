@@ -2,19 +2,13 @@
     pageEncoding="ISO-8859-1"%>
 <%@page import="com.cs336.pkg.*"%>
 <%@page import="java.util.*" %>
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="ISO-8859-1">
-<title>Deleting Schedule...</title>
-</head>
-<body>
 
 <%
 String schedID = request.getParameter("schedID");
 if(schedID == null) {
 	System.out.println("[delete_schedule_logic.jsp] missing param, redirect to login");
 	response.sendRedirect(Constants.INDEX_PATH_REDIRECT_URL);
+	return;
 } else {
 	boolean res = ApplicationDB.getInstance().DeleteSchedule(schedID);
 	if(res) {
@@ -27,6 +21,12 @@ if(schedID == null) {
 	}
 }
 %>
-
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Deleting Schedule...</title>
+</head>
+<body>
 </body>
 </html>

@@ -2,6 +2,15 @@
     pageEncoding="ISO-8859-1"%>
 <%@page import="com.cs336.pkg.*"%>
 <%@page import="java.util.*" %>
+<%
+String SSN = request.getParameter("SSN");
+if(SSN == null || SSN.length() != 11) {
+	//redirect to dispatcher
+	System.out.println("[delete_employee_logic.jsp] no param - redirecting to dispatch");
+	response.sendRedirect(Constants.INDEX_PATH_REDIRECT_URL);
+	return;
+}
+%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -9,15 +18,7 @@
 <title>Deleting Employee...</title>
 </head>
 <body>
-
 <%
-String SSN = request.getParameter("SSN");
-if(SSN == null || SSN.length() != 11) {
-	//redirect to dispatcher
-	System.out.println("[delete_employee_logic.jsp] no param - redirecting to dispatch");
-	response.sendRedirect(Constants.INDEX_PATH_REDIRECT_URL);
-}
-
 boolean res = ApplicationDB.getInstance().DeleteEmployee(SSN);
 if(res == true) {
 	System.out.println("[delete_employee_logic.jsp] successfully deleted " + SSN);

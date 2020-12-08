@@ -2,13 +2,6 @@
     pageEncoding="ISO-8859-1"%>
 <%@page import="com.cs336.pkg.*"%>
 <%@page import="java.util.*" %>
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="ISO-8859-1">
-<title>Editing Representative...</title>
-</head>
-<body>
 <%
 String SSN = request.getParameter("SSN");
 String username = request.getParameter("username");
@@ -25,5 +18,12 @@ if(res) {
 	response.sendRedirect(Constants.EDIT_EMPLOYEE_UI_PAGE + "?failed=true&employee_ssn=" + SSN);
 }
 %>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Editing Representative...</title>
+</head>
+<body>
 </body>
 </html>

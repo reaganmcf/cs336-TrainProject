@@ -1,6 +1,14 @@
 <%@page import="com.cs336.pkg.*"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
+<%
+String type = request.getParameter(Constants.CREATE_ACCOUNT_PARAMETER);
+if(type == null) {
+	//redirect to dispatcher
+	System.out.println("[create_account_logic.jsp] no param - redirecting to dispatch");
+	response.sendRedirect(Constants.INDEX_PATH_REDIRECT_URL);
+}
+%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -8,14 +16,8 @@
 <title>Creating Account...</title>
 </head>
 <body>
-
 <%
-String type = request.getParameter(Constants.CREATE_ACCOUNT_PARAMETER);
-if(type == null) {
-	//redirect to dispatcher
-	System.out.println("[create_account_logic.jsp] no param - redirecting to dispatch");
-	response.sendRedirect(Constants.INDEX_PATH_REDIRECT_URL);
-} else if(type.equals("customer")) {
+if(type.equals("customer")) {
 	String username = request.getParameter("username");
 	String password = request.getParameter("password");
 	String email = request.getParameter("email");

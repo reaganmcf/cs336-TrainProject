@@ -2,6 +2,14 @@
     pageEncoding="ISO-8859-1"%>
 <%@page import="com.cs336.pkg.*"%>
 <%@page import="java.util.*" %>
+<%
+String year = request.getParameter("year");
+String month = request.getParameter("month");
+if(year == null && month == null) {
+	System.out.println("[obtain_monthly_sales_logic.jsp] must not be an admin, redirect to login");
+	response.sendRedirect(Constants.INDEX_PATH_REDIRECT_URL);
+}
+%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -12,12 +20,6 @@
 <body style="padding: 50px">
 
 <%
-String year = request.getParameter("year");
-String month = request.getParameter("month");
-if(year == null && month == null) {
-	System.out.println("[obtain_monthly_sales_logic.jsp] must not be an admin, redirect to login");
-	response.sendRedirect(Constants.INDEX_PATH_REDIRECT_URL);
-}
 
 float totalSales = ApplicationDB.getInstance().GetMonthlySales(year, month);
 

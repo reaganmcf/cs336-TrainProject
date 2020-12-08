@@ -3,15 +3,18 @@
 <!DOCTYPE html>
 <html>
 <head>
+<link href="favicon.ico" rel="icon" type="image/x-icon" />
 <jsp:include page="include.jsp" />
 <meta charset="ISO-8859-1">
 <title>Login Dispatcher</title>
 </head>
 <body style="text-align: center; padding: 50px">
-
+<h1>Welcome to CS336 Train Project</h1>
+<p><i>Reagan McFarland, Toshanraju Vysaraju, Alay Shah, Kuber Sood, Zuhaib Azam</i></p> 
+<br/><br/>
 <h2>Select Account Type</h2>
 <form type="post" action="admin_login_ui.jsp">
-	<div style="margin-top: 50px">
+	<div style="margin-top: 50px;">
 		<input value="Admin" type="submit" class="btn btn-primary"/>
 	</div>
 </form>

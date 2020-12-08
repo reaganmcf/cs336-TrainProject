@@ -2,6 +2,14 @@
 <%@page import="java.util.*" %>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
+<%
+Employee employee = (Employee) request.getSession().getAttribute(Constants.HTTP_SESSION_EMPLOYEE);
+if(employee == null) {
+	//shouldn't be here. Redirect
+	System.out.println("[employee_index.jsp] unauthorized access - redirecting to dispatch");
+	response.sendRedirect(Constants.INDEX_PATH_REDIRECT_URL);
+	return;
+}%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -10,16 +18,7 @@
 <title>Employee Main Page</title>
 </head>
 <body style="padding:50px">
-
 <%
-Employee employee = (Employee) request.getSession().getAttribute(Constants.HTTP_SESSION_EMPLOYEE);
-
-if(employee == null) {
-	//shouldn't be here. Redirect
-	System.out.println("[employee_index.jsp] unauthorized access - redirecting to dispatch");
-	response.sendRedirect(Constants.INDEX_PATH_REDIRECT_URL);
-	return;
-}
 
 ArrayList<QA> questions = ApplicationDB.getInstance().GetQuestions();
 ArrayList<Station> stations = ApplicationDB.getInstance().GetStations();

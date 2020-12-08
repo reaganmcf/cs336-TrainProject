@@ -2,13 +2,6 @@
 <%@page import="java.util.*" %>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="ISO-8859-1">
-<title>Answering...</title>
-</head>
-<body>
 <%
 String question = request.getParameter("question");
 String answer = request.getParameter("answer");
@@ -27,6 +20,12 @@ if(res == true) {
 	response.sendRedirect("./../employee/employee_index.jsp" + "?failed_answer=true");
 }
 %>
-
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Answering...</title>
+</head>
+<body>
 </body>
 </html>
