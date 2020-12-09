@@ -21,8 +21,7 @@ public class ApplicationDB {
 	private Connection getConnection(){
 		
 		//Create a connection string
-		
-		
+
 		try {
 			//Load JDBC driver - the interface standardizing the connection procedure. Look at WEB-INF\lib for a mysql connector jar file, otherwise it fails.
 			Class.forName("com.mysql.jdbc.Driver").newInstance();
@@ -51,6 +50,7 @@ public class ApplicationDB {
 	public void closeConnection(){
 		try {
 			connection.close();
+			connection = null;
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -107,7 +107,7 @@ public class ApplicationDB {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-//		closeConnection();
+		closeConnection();
 		return false;	
 	}
 	
@@ -164,7 +164,7 @@ public class ApplicationDB {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		//closeConnection();
+		closeConnection();
 		return false;	
 	}
 	
@@ -221,7 +221,7 @@ public class ApplicationDB {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-//		closeConnection();
+		closeConnection();
 		return false;	
 	}
 
@@ -273,7 +273,7 @@ public class ApplicationDB {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-//		closeConnection();	
+		closeConnection();	
 		return res;
 	}
 
@@ -324,7 +324,7 @@ public class ApplicationDB {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-//		closeConnection();
+		closeConnection();
 		return res;
 	}
 	
@@ -371,7 +371,7 @@ public class ApplicationDB {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-//		closeConnection();
+		closeConnection();
 		return res;
 	}
 	
@@ -417,7 +417,7 @@ public class ApplicationDB {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-//		closeConnection();
+		closeConnection();
 		return res;
 	}
 	
@@ -470,7 +470,7 @@ public class ApplicationDB {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-//		closeConnection();
+		closeConnection();
 		return res;
 	}
 	
@@ -517,7 +517,7 @@ public class ApplicationDB {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-//		closeConnection();
+		closeConnection();
 		return res;
 	}
 	
@@ -568,7 +568,7 @@ public class ApplicationDB {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-//		closeConnection();
+		closeConnection();
 		return res;
 	}
 	
@@ -617,7 +617,7 @@ public class ApplicationDB {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		// closeConnection();
+		closeConnection();
 		return ret;
 	}
 	
@@ -667,7 +667,7 @@ public class ApplicationDB {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-//		closeConnection();
+		closeConnection();
 		return ret;
 	}
 	
@@ -714,7 +714,7 @@ public class ApplicationDB {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-//		closeConnection();
+		closeConnection();
 		return ret;
 	}
 	
@@ -761,7 +761,7 @@ public class ApplicationDB {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-//		closeConnection();
+		closeConnection();
 		return ret;
 	}
 	
@@ -809,7 +809,7 @@ public class ApplicationDB {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-//		closeConnection();
+		closeConnection();
 		return ret;
 	}
 	
@@ -853,7 +853,7 @@ public class ApplicationDB {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-//		closeConnection();
+		closeConnection();
 		return res;
 	}
 	
@@ -898,7 +898,7 @@ public class ApplicationDB {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		//closeConnection();
+		closeConnection();
 		return res;
 	}
 	
@@ -949,7 +949,7 @@ public class ApplicationDB {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		//closeConnection();
+		closeConnection();
 		return res;
 	}
 	
@@ -994,7 +994,7 @@ public class ApplicationDB {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		//closeConnection();
+		closeConnection();
 		return 0;
 	}
 	
@@ -1041,7 +1041,7 @@ public class ApplicationDB {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		//closeConnection();
+		closeConnection();
 		return ret;
 	}
 	
@@ -1087,7 +1087,7 @@ public class ApplicationDB {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		//closeConnection();
+		closeConnection();
 		return ret;
 	}
 	
@@ -1137,7 +1137,7 @@ public class ApplicationDB {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		//closeConnection();
+		closeConnection();
 		return ret;
 	}
 	
@@ -1183,7 +1183,7 @@ public class ApplicationDB {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		//closeConnection();
+		closeConnection();
 		return ret;
 	}
 	
@@ -1233,7 +1233,7 @@ public class ApplicationDB {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-//		closeConnection();
+		closeConnection();
 		return ret;
 	}
 	
@@ -1285,7 +1285,7 @@ public class ApplicationDB {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-//		closeConnection();
+		closeConnection();
 		return ret;
 	}
 	
@@ -1335,7 +1335,7 @@ public class ApplicationDB {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-//		closeConnection();
+		closeConnection();
 		return ret;
 	}
 	
@@ -1379,7 +1379,7 @@ public class ApplicationDB {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-//		closeConnection();
+		closeConnection();
 		return ret;
 	}
 	
@@ -1428,7 +1428,7 @@ public class ApplicationDB {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-//		closeConnection();
+		closeConnection();
 		return ret;
 	}
 	
@@ -1484,7 +1484,7 @@ public class ApplicationDB {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-//		closeConnection();
+		closeConnection();
 		return ret;
 	}
 	
@@ -1540,7 +1540,7 @@ public class ApplicationDB {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-//		closeConnection();
+		closeConnection();
 		return ret;
 	}
 	
@@ -1590,7 +1590,7 @@ public class ApplicationDB {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-//		closeConnection();
+		closeConnection();
 		return ret;
 	}
 	
@@ -1663,7 +1663,7 @@ public class ApplicationDB {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-//		closeConnection();
+		closeConnection();
 		return ret;
 	}
 	
