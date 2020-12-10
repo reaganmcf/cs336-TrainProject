@@ -1,5 +1,5 @@
 # cs336-TrainProject
-CS336 F2020 Final Proiject
+CS336 F2020 Final Project
 - [ ]  **Account Functionality**
     - [ ]  Register Customers
     - [ ]  Login (for all customers, admin, customer reps)
