@@ -11,10 +11,17 @@ String date_month = request.getParameter("date_month");
 String date_day = request.getParameter("date_day");
 if(origin == null || destination == null || date_year == null || date_month == null || date_day == null) {
 	//redirect to dispatcher
-	System.out.println("[search_schedules_logic.jsp] no param - redirecting to dispatch");
+	System.out.println("[search_schedules_ui.jsp] no param - redirecting to dispatch");
 	response.sendRedirect(Constants.INDEX_PATH_REDIRECT_URL);
 	return;
 }
+
+String t_sort_index = request.getParameter("sort_index");
+int sort_index = 0;
+if(t_sort_index != null) {
+	sort_index = Integer.parseInt(t_sort_index);
+}
+
 %>
 <!DOCTYPE html>
 <html>
@@ -34,7 +41,7 @@ Date d = new Date(Integer.parseInt(date_year) - 1900, Integer.parseInt(date_mont
 				<div class="card-header">Schedules</div>
 				<table class="table table-bordered table-striped">
 				<%
-				ArrayList<SpecialSchedule> ret = ApplicationDB.getInstance().SearchSchedules(origin, destination, d);
+				ArrayList<SpecialSchedule> ret = ApplicationDB.getInstance().SearchSchedules(origin, destination, d, sort_index);
 				
 				
 				out.print(Constants.SPECIAL_SCHEDULE_TABLE_HEADERS + "<th>Reserve</th>");

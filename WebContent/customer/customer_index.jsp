@@ -19,6 +19,8 @@ request.getSession().setAttribute(Constants.HTTP_SESSION_STATION_LIST, stations)
 
 ArrayList<TrainLine> trainlines = ApplicationDB.getInstance().GetTrainLines();
 request.getSession().setAttribute(Constants.HTTP_SESSION_TRAIN_LINE_LIST, trainlines);
+
+ArrayList<Reservation> currentReservations = ApplicationDB.getInstance().GetReservationsByUsername(customer.getUsername());
 %>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
@@ -43,6 +45,10 @@ if(request.getParameter("failed_send") != null) {
 	%><div class="alert alert-success">Successfully Made Reservation</div><%
 } else if(request.getParameter("reservation_failed") != null) {
 	%><div class="alert alert-danger">Failed to make Reservation. Please try again</div><%
+} else if(request.getParameter("cancel_reservation_failed") != null) {
+	%><div class="alert alert-danger">Failed to cancel Reservation. Please try again</div><%
+} else if(request.getParameter("cancel_reservation_success") != null) {
+	%><div class="alert alert-success">Successfully canceled Reservation</div><%
 }
 %>
 </div>
@@ -89,6 +95,24 @@ if(request.getParameter("failed_send") != null) {
 	</div>
 </div>
 
+<!-- Current Reservations -->
+<div class="card" style="margin: 20px; width:30%">
+	<div class="card-header">Reservations</div>
+	<div style="padding: 10px">
+		
+		<form method="post" action="current_reservations_ui.jsp">
+			<input type="submit" class="btn btn-primary" value="View Current Reservations"/>
+		</form>
+		<br/>
+		<form method="post" action="current_reservations_ui.jsp">
+			<input type="submit" class="btn btn-danger" value="Cancel Current Reservations"/>
+		</form>
+		<br/>
+		<form method="post" action="past_reservations_ui.jsp">
+			<input type="submit" class="btn btn-primary" value="View Past Reservations"/>
+		</form>
+	</div>
+</div>
 
 
 <!--  SEARCH TRAIN SCHEDULES  -->
@@ -130,6 +154,15 @@ if(request.getParameter("failed_send") != null) {
 				<input class="form-control" type="text" name="date_day" minlength=1 maxlength=2 required/>
 			</div>
 			
+			<div class="form-group">
+				<label>Sort By:</label><br/>
+				<select class="form-control type="text" name="sort_index" required>
+					<option class="form-control" value="0" selected>Sort By Fare </option>
+					<option class="form-control" value="1">Sort By Date Ascending</option>
+					<option class="form-control" value="2">Sort By Date Descending</option>
+				</select>
+				
+			</div>
 			
 			<input class="btn btn-primary" type="submit" value="Search for Schedules"/>
 		</form>
