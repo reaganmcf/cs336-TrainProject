@@ -718,7 +718,121 @@ public class ApplicationDB {
 		return ret;
 	}
 	
+	
+	
+	/**
+	 * GetReservationsByUsername
+	 * 
+	 * Gets all the reservations for a particular user
+	 * 
+	 * @return ArrayList<Reservation> list of Reservation objects
+	 */
+	public ArrayList<Reservation> GetReservationsByUsername(String username) {
+		ArrayList<Reservation> ret = new ArrayList<Reservation>();
+		//If we haven't established a connection, establish one
+		if(connection == null) connection = getConnection();
+		//If we failed to establish a connection, return false
+		if(connection == null) return ret;
+		System.out.println("[GetReservationsByUsername] Connected to Database");
+		Statement stmt;
+		try {
+			stmt = connection.createStatement();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
 
+		try {
+			//use the production database
+			stmt.execute("use TrainProject");
+			//run our query
+			String query = String.format("SELECT * FROM Reservation r where r.date>NOW() AND r.username = '%s'", username);
+			System.out.println("[GetReservationsByUsername] running : " + query);
+			
+			ResultSet res = stmt.executeQuery(query);
+			System.out.println("[GetReservationsByUsername] Query successfully has data");
+			while(res.next()) {
+				Reservation r = new Reservation(
+					res.getInt("resNum"),
+					res.getFloat("totalFare"),
+					res.getString("passenger"),
+					res.getString("date"),
+					res.getInt("originID"),
+					res.getInt("destinationID"),
+					res.getString("lineName"),
+					res.getString("username"),
+					res.getBoolean("isChild"),
+					res.getBoolean("isSenior"),
+					res.getBoolean("isDisabled"),
+					res.getInt("schedID"));
+				ret.add(r);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		closeConnection();
+		return ret;
+	}
+	
+
+
+	/**
+	 * GetPastReservationsByUsername
+	 * 
+	 * Gets all past the reservations for a particular user
+	 * 
+	 * @return ArrayList<Reservation> list of Reservation objects
+	 */
+	public ArrayList<Reservation> GetPastReservationsByUsername(String username) {
+		ArrayList<Reservation> ret = new ArrayList<Reservation>();
+		//If we haven't established a connection, establish one
+		if(connection == null) connection = getConnection();
+		//If we failed to establish a connection, return false
+		if(connection == null) return ret;
+		System.out.println("[GetPastReservationsByUsername] Connected to Database");
+		Statement stmt;
+		try {
+			stmt = connection.createStatement();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+
+		try {
+			//use the production database
+			stmt.execute("use TrainProject");
+			//run our query
+			String query = String.format("SELECT * FROM Reservation r where r.date<NOW() AND r.username = '%s'", username);
+			System.out.println("[GetPastReservationsByUsername] running : " + query);
+			
+			ResultSet res = stmt.executeQuery(query);
+			System.out.println("[GetPastReservationsByUsername] Query successfully has data");
+			while(res.next()) {
+				Reservation r = new Reservation(
+					res.getInt("resNum"),
+					res.getFloat("totalFare"),
+					res.getString("passenger"),
+					res.getString("date"),
+					res.getInt("originID"),
+					res.getInt("destinationID"),
+					res.getString("lineName"),
+					res.getString("username"),
+					res.getBoolean("isChild"),
+					res.getBoolean("isSenior"),
+					res.getBoolean("isDisabled"),
+					res.getInt("schedID"));
+				ret.add(r);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		closeConnection();
+		return ret;
+	}
+	
+	
 	
 	/**
 	 * GetTrains
@@ -849,6 +963,50 @@ public class ApplicationDB {
 				System.out.println("[SendQuestion] Query successfully has data");
 			} else {
 				System.out.println("[SendQuestion] Query failed to insert new question into table");
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		closeConnection();
+		return res;
+	}
+	
+	
+	
+	/**
+	 * CancelReservation
+	 * 
+	 * Cancel a reservation given a resNum
+	 * 
+	 * @return boolean status of the operation
+	 */
+	public boolean CancelReservation(int resNum) {
+		//If we haven't established a connection, establish one
+		if(connection == null) connection = getConnection();
+		//If we failed to establish a connection, return false
+		if(connection == null) return false;
+		System.out.println("[CancelReservation] Connected to Database");
+		Statement stmt;
+		try {
+			stmt = connection.createStatement();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return false;
+		}
+		boolean res = false;
+		try {
+			//use the production database
+			stmt.execute("use TrainProject");
+			//run our query
+			String query = String.format("DELETE from Reservation r where '%s' = r.resNum", resNum);
+			System.out.println("[CancelReservation] running : " + query);
+			
+			res = stmt.executeUpdate(query) > 0;
+			if(res) {
+				System.out.println("[CancelReservation] Query successfully has data");
+			} else {
+				System.out.println("[CancelReservation] Query failed to insert new question into table");
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -1470,7 +1628,7 @@ public class ApplicationDB {
 						res.getInt("resNum"),
 						res.getFloat("totalFare"),
 						res.getString("passenger"),
-						res.getDate("date"),
+						res.getString("date"),
 						res.getInt("originID"),
 						res.getInt("destinationID"),
 						res.getString("lineName"),
@@ -1526,7 +1684,7 @@ public class ApplicationDB {
 						res.getInt("resNum"),
 						res.getFloat("totalFare"),
 						res.getString("passenger"),
-						res.getDate("date"),
+						res.getString("date"),
 						res.getInt("originID"),
 						res.getInt("destinationID"),
 						res.getString("lineName"),
@@ -1605,10 +1763,10 @@ public class ApplicationDB {
 	 * @param String destinationName
 	 * @param java.sql.Date date
 	 * @param String lineName
-	 * 
+	 * @param int sortToggle index means the sorting method (0 - default, 1 - sort by desc, 2 - sort by asc)
 	 * @return ArrayList<SpecialSchedule> list of SpecialSchedule objects
 	 */
-	public ArrayList<SpecialSchedule> SearchSchedules(String originName, String destinationName, java.sql.Date date) {
+	public ArrayList<SpecialSchedule> SearchSchedules(String originName, String destinationName, java.sql.Date date, int sort_toggle) {
 		//If we haven't established a connection, establish one
 		if(connection == null) connection = getConnection();
 		//If we failed to establish a connection, return false
@@ -1641,7 +1799,13 @@ public class ApplicationDB {
 			stmt.execute("set @addOriginTime  = @timePerStop * @differenceOrigin;");
 			stmt.execute("set @addDestinationTime = @timePerStop * @differenceDest;");
 			stmt.execute("set @fare = @farePerStop * @numStops;");
-			res = stmt.executeQuery("select s.schedID, s.originID, s.lineName, s.destinationID, s.tID, DATE_ADD(s.startTime, INTERVAL @addOriginTime MINUTE) as start, DATE_ADD(s.startTime, INTERVAL @addDestinationTime MINUTE) as end, @fare as fare from Schedule s where s.lineName = @line AND s.startTime LIKE @selectedDate;");
+			String sortSuffix = "";
+			if(sort_toggle == 1) {
+				sortSuffix = "order by start asc";
+			} else if(sort_toggle == 2) {
+				sortSuffix = "order by start desc";
+			}
+			res = stmt.executeQuery("select s.schedID, s.originID, s.lineName, s.destinationID, s.tID, DATE_ADD(s.startTime, INTERVAL @addOriginTime MINUTE) as start, DATE_ADD(s.startTime, INTERVAL @addDestinationTime MINUTE) as end, @fare as fare from Schedule s where s.lineName = @line AND s.startTime LIKE @selectedDate " + sortSuffix);
 			//run our query
 			ret = new ArrayList<SpecialSchedule>();
 		

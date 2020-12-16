@@ -7,7 +7,7 @@ public class Reservation {
 	private int resNum;
 	private float totalFare;
 	private String passenger;
-	private Date date;
+	private String date;
 	private int originID;
 	private int destinationID;
 	private String lineName;
@@ -21,7 +21,7 @@ public class Reservation {
 			int resNum,
 			float totalFare,
 			String passenger,
-			Date date,
+			String date,
 			int originID,
 			int destinationID,
 			String lineName,
@@ -56,7 +56,7 @@ public class Reservation {
 		return passenger;
 	}
 
-	public Date getDate() {
+	public String getDate() {
 		return date;
 	}
 
@@ -97,7 +97,7 @@ public class Reservation {
 				"<td>"+this.getResNum()+"</td>"+
 				"<td>"+this.getTotalFare()+"</td>"+
 				"<td>"+this.getPassenger()+"</td>"+
-				"<td>"+this.getDate().toGMTString()+"</td>"+
+				"<td>"+this.getDate()+"</td>"+
 				"<td>"+this.getOriginID()+"</td>"+
 				"<td>"+this.getDestinationID()+"</td>"+
 				"<td>"+this.getLineName()+"</td>"+
@@ -107,6 +107,21 @@ public class Reservation {
 				"<td>"+(this.isDisabled() ? "YES" : "NO")+"</td>"+
 				"<td>"+this.getSchedID()+"</td>"+
 				"</tr>";
+	}
+	
+	public String toRawTableString() {
+		return "<td>"+this.getResNum()+"</td>"+
+				"<td>"+this.getTotalFare()+"</td>"+
+				"<td>"+this.getPassenger()+"</td>"+
+				"<td>"+this.getDate()+"</td>"+
+				"<td>"+this.getOriginID()+"</td>"+
+				"<td>"+this.getDestinationID()+"</td>"+
+				"<td>"+this.getLineName()+"</td>"+
+				"<td>"+this.getUsername()+"</td>"+
+				"<td>"+(this.isChild() ? "YES" : "NO")+"</td>"+
+				"<td>"+(this.isSenior() ? "YES" : "NO")+"</td>"+
+				"<td>"+(this.isDisabled() ? "YES" : "NO")+"</td>"+
+				"<td>"+this.getSchedID()+"</td>";
 	}
 	
 }

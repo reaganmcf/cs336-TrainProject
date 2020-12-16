@@ -42,7 +42,7 @@
 				<input class="form-control" id="lastName" type="text" name="lastName" placeholder="Doe" required/>
 			</div>
 			
-			<input class="btn btn-primary" type="submit" value="Create New Representative"/>
+			<input class="btn btn-primary" type="submit" value="Create New Customer"/>
 		</form>
 	</div>
 </div>
